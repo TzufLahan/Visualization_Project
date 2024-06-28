@@ -22,7 +22,7 @@ genders = ['Male', 'Female']
 Region_list = ['Pacific', 'Mountain', 'West North Central', 'West South Central', 'East North Central', 'East South Central', 'South Atlantic', 'Middle Atlantic', 'New England']
 
 # Load the shapefile for the US regions
-shapefile_path = 'https://github.com/tzuflahan/Streamlit/blob/cad419d17d95676c82caec2fa521e96555aa3342/aggregated_regions.geojson'
+shapefile_path = 'https://github.com/tzuflahan/Streamlit/main/aggregated_regions.geojson'
 gdf = gpd.read_file(shapefile_path)
 
 # Ensure all regions are included in the GeoDataFrame
