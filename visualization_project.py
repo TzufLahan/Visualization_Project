@@ -1,4 +1,5 @@
 import json
+import requests
 import streamlit as st
 import geopandas as gpd
 import pandas as pd
@@ -21,9 +22,18 @@ income_levels = ['$0 - $24,999', '$25,000 - $49,999', '$50,000 - $99,999', '$100
 genders = ['Male', 'Female']
 Region_list = ['Pacific', 'Mountain', 'West North Central', 'West South Central', 'East North Central', 'East South Central', 'South Atlantic', 'Middle Atlantic', 'New England']
 
+
+def download_geojson(url, local_path):
+    response = requests.get(url)
+    with open(local_path, 'wb') as file:
+        file.write(response.content)
+
+geojson_url = 'https://raw.githubusercontent.com/tzuflahan/Streamlit/main/aggregated_regions.geojson'
+local_geojson_path = 'aggregated_regions.geojson'
+download_geojson(geojson_url, local_geojson_path)
+
 # Load the shapefile for the US regions
-shapefile_path = 'https://github.com/tzuflahan/Streamlit/main/aggregated_regions.geojson'
-gdf = gpd.read_file(shapefile_path)
+gdf = gpd.read_file(local_geojson_path)
 
 # Ensure all regions are included in the GeoDataFrame
 missing_regions = [region for region in Region_list if region not in gdf['region'].values]
