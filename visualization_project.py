@@ -77,7 +77,7 @@ st.set_page_config(
 # Title and description
 st.title('US Heat Map Politeness Level By Regions')
 
-st.image("C:\\Users\\zupl1\\OneDrive - post.bgu.ac.il\\שולחן העבודה\\Flight.png", use_column_width = True, width=50)
+st.image("https://raw.githubusercontent.com/tzuflahan/Streamlit/main/Flight.png", use_column_width = True, width=50)
 st.markdown("""
     <div style='text-align: center'>
         Welcome to the US Regions Politeness Heat Map! This interactive app allows you to explore the average politeness scores 
