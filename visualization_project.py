@@ -144,7 +144,7 @@ if not filtered_data.empty:
         geojson=merged_geojson,
         locations=merged.index,
         color='avg_politeness_score_normalized',
-        color_continuous_scale=greens_cmap,  # Custom color scale,
+        color_continuous_scale="Viridis",  # Use a predefined Plotly colorscale for testing
         range_color=[global_min, global_max],  # Set the range color to global min and max
         mapbox_style="open-street-map",
         zoom=3,
@@ -152,7 +152,7 @@ if not filtered_data.empty:
         opacity=0.5,
         labels={'avg_politeness_score_normalized': 'Avg Politeness Score'}
     )
-
+    
     # Calculate centroids for each region to place the text annotations
     gdf['centroid'] = gdf.centroid
     for idx, row in gdf.iterrows():
@@ -164,7 +164,7 @@ if not filtered_data.empty:
             showlegend=False,  # Hide the traces in the legend
             textfont=dict(size=10, color='black'),
         ))
-
+    
     # Plot the interactive map
     st.plotly_chart(fig, use_container_width=True)
 
