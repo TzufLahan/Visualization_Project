@@ -121,22 +121,7 @@ if not filtered_data.empty:
 
     # Convert GeoDataFrame to GeoJSON
     merged_geojson = json.loads(merged.to_json())
-
-    # Function to convert Matplotlib colormap to Plotly colorscale
-    def matplotlib_to_plotly(cmap, num_colors=256):
-        h = 1.0 / (num_colors - 1)
-        pl_colorscale = []
-        for k in range(num_colors):
-            C = list(map(np.uint8, np.array(cmap(k * h)[:3]) * 255))
-            pl_colorscale.append([k * h, 'rgb' + str((C[0], C[1], C[2]))])
-        return pl_colorscale
-
-    # Create the colormap
-    greens_cmap = matplotlib_to_plotly(cm.Greens, num_colors=256)
-
-    # Adjust vmin and vmax for color scale
-    vmin = 0.1  # Minimum value for color scale
-    vmax = 0.4  # Maximum value for color scale
+    
 
     # Create an interactive map with Plotly
     fig = px.choropleth_mapbox(
@@ -144,7 +129,7 @@ if not filtered_data.empty:
         geojson=merged_geojson,
         locations=merged.index,
         color='avg_politeness_score_normalized',
-        color_continuous_scale=greens_cmap,  # Use a predefined Plotly colorscale for testing
+        color_continuous_scale="Greens",  # Use a predefined Plotly colorscale for testing
         range_color=[global_min, global_max],  # Set the range color to global min and max
         mapbox_style="open-street-map",
         zoom=3,
@@ -187,7 +172,7 @@ if not filtered_data.empty:
         fig_education = px.bar(education_politeness, x='Education', y='politeness_score_normalized',
                                title=f'Politeness by Education in {selected_region}',
                                color='politeness_score_normalized',
-                               color_continuous_scale=greens_cmap)  # Adjusted color range)  # Use Greens color scale
+                               color_continuous_scale="Greens")  # Adjusted color range)  # Use Greens color scale
         st.plotly_chart(fig_education, use_container_width=True)
 
         # Second graph: Politeness level by income level and gender
@@ -196,7 +181,7 @@ if not filtered_data.empty:
         fig_income_gender = px.bar(income_gender_politeness, x='Household Income', y='politeness_score_normalized',
                                    color='Gender', barmode='group',
                                    title=f'Politeness by Income Level and Gender in {selected_region}',
-                                   color_continuous_scale=greens_cmap)  # Use Greens color scale
+                                   color_continuous_scale="Greens")  # Use Greens color scale
         st.plotly_chart(fig_income_gender, use_container_width=True)
 else:
     st.write("No data available for the selected filters.")
