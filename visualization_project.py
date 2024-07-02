@@ -165,7 +165,7 @@ if not filtered_data.empty:
 
     if selected_region:
         st.session_state.selected_region = selected_region  # Update session state
-        region_data = filtered_data[filtered_data['Mapped Location'] == selected_region]
+        region_data = preprocessed_flying_etiquette_df[preprocessed_flying_etiquette_df['Location'] == selected_region]
 
         # First graph: Politeness level by education
         education_politeness = region_data.groupby('Education')['politeness_score_normalized'].mean().reset_index()
