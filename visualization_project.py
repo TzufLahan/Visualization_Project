@@ -144,7 +144,7 @@ if not filtered_data.empty:
         geojson=merged_geojson,
         locations=merged.index,
         color='avg_politeness_score_normalized',
-        color_continuous_scale="Viridis",  # Use a predefined Plotly colorscale for testing
+        color_continuous_scale=greens_cmap,  # Use a predefined Plotly colorscale for testing
         range_color=[global_min, global_max],  # Set the range color to global min and max
         mapbox_style="open-street-map",
         zoom=3,
