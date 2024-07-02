@@ -178,7 +178,7 @@ if not filtered_data.empty:
         # Second graph: Politeness level by income level and gender
         income_gender_politeness = region_data.groupby(['Household Income', 'Gender'])['politeness_score_normalized'].mean().reset_index()
         fig_income_gender = px.bar(income_gender_politeness, x='Household Income', y='politeness_score_normalized', color='Gender', barmode='group',
-                                   title=f'Politeness by Income Level and Gender in {selected_region}', color_discrete_map={'Female': 'green', 'Male': 'gray'
+                                   title=f'Politeness by Income Level and Gender in {selected_region}', color_discrete_map={'Female': 'green', 'Male': 'gray'}
                                   )
         st.plotly_chart(fig_income_gender, use_container_width=True)
 else:
