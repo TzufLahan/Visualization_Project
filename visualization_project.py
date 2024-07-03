@@ -167,11 +167,11 @@ if not filtered_data.empty:
         st.session_state.selected_region = selected_region  # Update session state
         region_data = preprocessed_flying_etiquette_df[preprocessed_flying_etiquette_df['Location'] == selected_region]
 
-        # Group by education and calculate politeness and population size
-        education_politeness = region_data.groupby('Education').agg(
-            politeness_score_normalized=('politeness_score_normalized', 'mean'),
-            population_size=('politeness_score_normalized', 'size')
-        ).reset_index()
+        # # Group by education and calculate politeness and population size
+        # education_politeness = region_data.groupby('Education').agg(
+        #     politeness_score_normalized=('politeness_score_normalized', 'mean'),
+        #     population_size=('politeness_score_normalized', 'size')
+        # ).reset_index()
         
         # Group by education, calculate mean politeness score and count of occurrences
         education_politeness = region_data.groupby('Education').agg({'politeness_score_normalized': 'mean', 'Education': 'size'}).reset_index()
