@@ -166,28 +166,27 @@ if not filtered_data.empty:
     if selected_region:
         st.session_state.selected_region = selected_region  # Update session state
         region_data = preprocessed_flying_etiquette_df[preprocessed_flying_etiquette_df['Location'] == selected_region]
-
-        # # Group by education and calculate politeness and population size
-        # education_politeness = region_data.groupby('Education').agg(
-        #     politeness_score_normalized=('politeness_score_normalized', 'mean'),
-        #     population_size=('politeness_score_normalized', 'size')
-        # ).reset_index()
-        
-        # Group by education, calculate mean politeness score and count of occurrences
-        education_politeness = region_data.groupby('Education').agg({'politeness_score_normalized': 'mean', 'Education': 'size'}).reset_index()
-        education_politeness.columns = ['Education', 'politeness_score_normalized', 'size']
-
+    
+        # Group by education and calculate politeness and population size
+        education_politeness = region_data.groupby('Education').agg(
+            politeness_score_normalized=('politeness_score_normalized', 'mean'),
+            population_size=('politeness_score_normalized', 'size')
+        ).reset_index()
     
         # Create a bubble chart
-        education_politeness = region_data.groupby('Education').agg({'politeness_score_normalized': 'mean', 'ID': 'size'}).reset_index()
-        fig_education = px.scatter(education_politeness, x='Education', y='politeness_score_normalized',
-                                   size='ID', color='Education',
-                                   title=f'Politeness by Education in {selected_region}',
-                                   color_continuous_scale=px.colors.sequential.Greens,
-                                   size_max=60)  # Adjust size_max for larger starting size
+        fig_education = px.scatter(
+            education_politeness, 
+            x='Education', 
+            y='politeness_score_normalized',
+            size='population_size', 
+            color='Education',
+            title=f'Politeness by Education in {selected_region}',
+            color_continuous_scale=px.colors.sequential.Greens,
+            size_max=60  # Adjust size_max for larger starting size
+        )
         fig_education.update_traces(marker=dict(sizemin=15))  # Ensure smallest bubble is still visible
         st.plotly_chart(fig_education, use_container_width=True)
-        
+            
         # First graph: Politeness level by education
         education_politeness = region_data.groupby('Education')['politeness_score_normalized'].mean().reset_index()
         fig_education = px.bar(education_politeness, x='Education', y='politeness_score_normalized',
