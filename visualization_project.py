@@ -178,8 +178,8 @@ if not filtered_data.empty:
                                    size='population_size', color='Education',
                                    title=f'Politeness by Education in {selected_region}',
                                    color_discrete_sequence=px.colors.sequential.Greens[::-1],  # Adjust color sequence for deeper colors
-                                   size_max=30,  # Adjust size_max for larger starting size
-                                   range_y=[0, education_politeness['politeness_score_normalized'].max() * 1.5])  # Set Y-axis to start from 0
+                                   size_max=40,  # Adjust size_max for larger starting size
+                                   range_y=[0, education_politeness['politeness_score_normalized'].max() * 1.4])  # Set Y-axis to start from 0
         fig_education.update_traces(marker=dict(sizemin=15))  # Ensure smallest bubble is still visible
         fig_education.update_layout(margin=dict(t=50, b=100, l=50, r=50))
         st.plotly_chart(fig_education, use_container_width=True)
