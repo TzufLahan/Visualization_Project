@@ -172,6 +172,11 @@ if not filtered_data.empty:
             politeness_score_normalized=('politeness_score_normalized', 'mean'),
             population_size=('politeness_score_normalized', 'size')
         ).reset_index()
+        
+        # Group by education, calculate mean politeness score and count of occurrences
+        education_politeness = region_data.groupby('Education').agg({'politeness_score_normalized': 'mean', 'Education': 'size'}).reset_index()
+        education_politeness.columns = ['Education', 'politeness_score_normalized', 'size']
+
     
         # Create a bubble chart
         education_politeness = region_data.groupby('Education').agg({'politeness_score_normalized': 'mean', 'ID': 'size'}).reset_index()
