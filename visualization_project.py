@@ -173,7 +173,7 @@ if not filtered_data.empty:
             population_size=('politeness_score_normalized', 'size')
         ).reset_index()
     
-        # Create a bubble chart
+        # First graph: Politeness level by education
         fig_education = px.scatter(
             education_politeness, 
             x='Education', 
@@ -187,13 +187,6 @@ if not filtered_data.empty:
         fig_education.update_traces(marker=dict(sizemin=15))  # Ensure smallest bubble is still visible
         st.plotly_chart(fig_education, use_container_width=True)
             
-        # First graph: Politeness level by education
-        education_politeness = region_data.groupby('Education')['politeness_score_normalized'].mean().reset_index()
-        fig_education = px.bar(education_politeness, x='Education', y='politeness_score_normalized',
-                               title=f'Politeness by Education in {selected_region}',
-                               color='politeness_score_normalized',
-                               color_continuous_scale="Greens")  # Adjusted color range)  # Use Greens color scale
-        st.plotly_chart(fig_education, use_container_width=True)
 
         # Second graph: Politeness level by income level and gender
         income_gender_politeness = region_data.groupby(['Household Income', 'Gender'])['politeness_score_normalized'].mean().reset_index()
