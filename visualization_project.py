@@ -179,7 +179,7 @@ if not filtered_data.empty:
                                    size='population_size', 
                                    color='Education',
                                    title=f'Politeness by Education in {selected_region}',
-                                   color_discrete_sequence=Blues,  # Adjust color sequence for deeper colors
+                                   color_discrete_sequence=px.colors.sequential.Blues,  # Adjust color sequence for deeper colors
                                    size_max=40,  # Adjust size_max for larger starting size
                                    range_y=[0, education_politeness['politeness_score_normalized'].max() * 1.4])  # Set Y-axis to start from 0
         fig_education.update_traces(marker=dict(sizemin=15))  # Ensure smallest bubble is still visible
