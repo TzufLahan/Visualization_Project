@@ -178,10 +178,6 @@ if not filtered_data.empty:
             'Less than high school degree': '#6baed6',  # כחול בהיר
             'Some college or Associate degree': '#9ecae1'  # כחול בהיר מאוד
         }
-        
-        # Ensure all education levels are present
-        education_levels = ['Bachelor degree', 'Graduate degree', 'High school degree', 'Less than high school degree', 'Some college or Associate degree']
-        filtered_color_map = {level: color_discrete_map[level] for level in education_levels if level in education_politeness['Education'].values}
     
         # First graph: Politeness level by education
         fig_education = px.scatter(education_politeness, 
