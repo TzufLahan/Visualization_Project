@@ -122,23 +122,49 @@ if not filtered_data.empty:
     # Convert GeoDataFrame to GeoJSON
     merged_geojson = json.loads(merged.to_json())
     
-
-    # Create an interactive map with Plotly
-    blues_cmap = px.colors.sequential.Blues[2:8]
-
-    fig = px.choropleth_mapbox(
-    merged,
-    geojson=merged_geojson,
-    locations=merged.index,
-    color='avg_politeness_score_normalized',
-    color_continuous_scale=blues_cmap,  # Use a predefined Plotly colorscale for testing
-    range_color=[global_min, global_max],  # Set the range color to global min and max
-    mapbox_style="open-street-map",
-    zoom=3,
-    center={"lat": 37.0902, "lon": -95.7129},
-    opacity=0.5,
-    labels={'avg_politeness_score_normalized': 'Avg Politeness Score'}
+    # Define the six blue shades
+    Blues6 = ['#084594', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef']
+    
+    # Define the bins for the politeness score
+    bins = np.linspace(data['politeness_score'].min(), data['politeness_score'].max(), 7)
+    
+    # Cut the politeness score into 6 bins
+    data['politeness_score_bins'] = pd.cut(data['politeness_score'], bins=bins, labels=Blues6, include_lowest=True)
+    
+    # Create a chloropleth map
+    fig = px.choropleth(
+        data_frame=data,
+        geojson='https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json', # Use your geojson data
+        locations='fips',  # Column in your data that matches the 'id' in the geojson
+        color='politeness_score_bins',  # Column in your data to use for coloring
+        category_orders={"politeness_score_bins": Blues6},
+        color_discrete_map="identity"
     )
+    
+    # Update the layout to ensure a dynamic color scale
+    fig.update_layout(
+        coloraxis_colorbar=dict(
+            title="Politeness Score",
+            tickvals=bins,
+            ticktext=[f'{bins[i]:.2f}-{bins[i+1]:.2f}' for i in range(len(bins)-1)],
+        )
+    )
+    # # Create an interactive map with Plotly
+    # blues_cmap = px.colors.sequential.Blues[2:8]
+
+    # fig = px.choropleth_mapbox(
+    # merged,
+    # geojson=merged_geojson,
+    # locations=merged.index,
+    # color='avg_politeness_score_normalized',
+    # color_continuous_scale=blues_cmap,  # Use a predefined Plotly colorscale for testing
+    # range_color=[global_min, global_max],  # Set the range color to global min and max
+    # mapbox_style="open-street-map",
+    # zoom=3,
+    # center={"lat": 37.0902, "lon": -95.7129},
+    # opacity=0.5,
+    # labels={'avg_politeness_score_normalized': 'Avg Politeness Score'}
+    # )
     
     # Calculate centroids for each region to place the text annotations
     gdf['centroid'] = gdf.centroid
