@@ -171,6 +171,14 @@ if not filtered_data.empty:
             population_size=('politeness_score_normalized', 'size')
         ).reset_index()
 
+        # Create a blue colormap with matplotlib
+        blues_cmap = plt.get_cmap('Blues')
+        
+        # Create a sequence of indices with a step of 2
+        indices = np.linspace(0, 1, 12)[:2:-2]  # Adjust the number of colors and step here
+        
+        # Extract colors from the colormap using the indices
+        selected_colors = [blues_cmap(i) for i in indices]
     
         # First graph: Politeness level by education
         fig_education = px.scatter(education_politeness, 
@@ -179,7 +187,7 @@ if not filtered_data.empty:
                                    size='population_size', 
                                    color='Education',
                                    title=f'Politeness by Education in {selected_region}',
-                                   color_discrete_sequence=blues_cmap[:2:-1],  # Adjust color sequence for deeper colors
+                                   color_discrete_sequence=selected_colors,  # Adjust color sequence for deeper colors
                                    size_max=40,  # Adjust size_max for larger starting size
                                    range_y=[0, education_politeness['politeness_score_normalized'].max() * 1.4])  # Set Y-axis to start from 0
         fig_education.update_traces(marker=dict(sizemin=15))  # Ensure smallest bubble is still visible
