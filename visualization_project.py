@@ -187,8 +187,11 @@ if not filtered_data.empty:
                 color_discrete_map.pop(level, None) 
     
         # First graph: Politeness level by education
-        fig_education = px.scatter(education_politeness, x='Education', y='politeness_score_normalized',
-                                   size='population_size', color='Education',
+        fig_education = px.scatter(education_politeness, 
+                                   x='Education', 
+                                   y='politeness_score_normalized',
+                                   size='population_size', 
+                                   color='Education',
                                    title=f'Politeness by Education in {selected_region}',
                                    color_discrete_sequence=color_discrete_map,  # Adjust color sequence for deeper colors
                                    size_max=40,  # Adjust size_max for larger starting size
