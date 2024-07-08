@@ -148,26 +148,16 @@ if not filtered_data.empty:
         opacity=0.5,
         labels={'politeness_score_bins': 'Avg Politeness Score'}
     )
-    # Manually set the color scale with labels
-    fig.update_layout(coloraxis_colorbar=dict(
-        title="Politeness Level",
-        tickvals=[0, 0.2, 0.4, 0.6, 0.8, 1.0],
-        ticktext=["Very Low", "Low", "Moderate Low", "Moderate High", "High", "Very High"],
-        lenmode="fraction",
-        len=0.8,
-        xanchor="left",
-        yanchor="middle",
-        x=1,
-        y=0.5
-    ))
-    # # Update the layout to ensure a dynamic color scale
-    # fig.update_layout(
-    #     coloraxis_colorbar=dict(
-    #         title="Politeness Score",
-    #         tickvals=bins,
-    #         ticktext=[f'{bins[i]:.2f}-{bins[i+1]:.2f}' for i in range(len(bins)-1)],
-    #     )
-    # )
+
+    # Update the layout to ensure a dynamic color scale
+    fig.update_layout(
+        coloraxis_colorbar=dict(
+            title="Politeness Score",
+            tickvals=bins,
+            ticktext=[f'{bins[i]:.2f}-{bins[i+1]:.2f}' for i in range(len(bins)-1)],
+        )
+    )
+    
     # #Create an interactive map with Plotly
     # blues_cmap = px.colors.sequential.Blues[2:8]
 
