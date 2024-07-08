@@ -124,18 +124,16 @@ if not filtered_data.empty:
     
 
     # Create an interactive map with Plotly
+    blues_cmap = px.colors.sequential.Blues[2:8]
+
     fig = px.choropleth_mapbox(
-        merged,
-        geojson=merged_geojson,
-        locations=merged.index,
-        color='avg_politeness_score_normalized',
-        color_continuous_scale="Greens",  # Use a predefined Plotly colorscale for testing
-        range_color=[global_min, global_max],  # Set the range color to global min and max
-        mapbox_style="open-street-map",
-        zoom=3,
-        center={"lat": 37.0902, "lon": -95.7129},
+        filtered_data, geojson=geojson, locations='Location', color='politeness_score_normalized',
+        color_continuous_scale=blues_cmap,  # Use custom Blues color scale with 6 shades
+        range_color=(global_min, global_max),
+        mapbox_style="carto-positron",
+        zoom=3, center={"lat": 37.0902, "lon": -95.7129},
         opacity=0.5,
-        labels={'avg_politeness_score_normalized': 'Avg Politeness Score'}
+        labels={'politeness_score_normalized': 'Politeness Score'}
     )
     
     # Calculate centroids for each region to place the text annotations
@@ -177,7 +175,7 @@ if not filtered_data.empty:
         fig_education = px.scatter(education_politeness, x='Education', y='politeness_score_normalized',
                                    size='population_size', color='Education',
                                    title=f'Politeness by Education in {selected_region}',
-                                   color_discrete_sequence=px.colors.sequential.Greens[::-1],  # Adjust color sequence for deeper colors
+                                   color_discrete_sequence=px.colors.sequential.Blues[::-1],  # Adjust color sequence for deeper colors
                                    size_max=40,  # Adjust size_max for larger starting size
                                    range_y=[0, education_politeness['politeness_score_normalized'].max() * 1.4])  # Set Y-axis to start from 0
         fig_education.update_traces(marker=dict(sizemin=15))  # Ensure smallest bubble is still visible
@@ -188,7 +186,7 @@ if not filtered_data.empty:
         # Second graph: Politeness level by income level and gender
         income_gender_politeness = region_data.groupby(['Household Income', 'Gender'])['politeness_score_normalized'].mean().reset_index()
         fig_income_gender = px.bar(income_gender_politeness, x='Household Income', y='politeness_score_normalized', color='Gender', barmode='group',
-                                   title=f'Politeness by Income Level and Gender in {selected_region}', color_discrete_map={'Female': '#A3D6A0', 'Male': '#004d00'}
+                                   title=f'Politeness by Income Level and Gender in {selected_region}', color_discrete_map={'Female': '#1f77b4', 'Male': '#aec7e8'}
                                   )
         st.plotly_chart(fig_income_gender, use_container_width=True)
 else:
