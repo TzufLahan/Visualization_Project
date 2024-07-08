@@ -171,13 +171,6 @@ if not filtered_data.empty:
             population_size=('politeness_score_normalized', 'size')
         ).reset_index()
 
-        color_discrete_map = {
-            'Bachelor degree': '#084594',  # כחול כהה מאוד
-            'Graduate degree': '#2171b5',  # כחול כהה
-            'High school degree': '#4292c6',  # כחול בינוני
-            'Less than high school degree': '#6baed6',  # כחול בהיר
-            'Some college or Associate degree': '#9ecae1'  # כחול בהיר מאוד
-        }
     
         # First graph: Politeness level by education
         fig_education = px.scatter(education_politeness, 
@@ -186,7 +179,7 @@ if not filtered_data.empty:
                                    size='population_size', 
                                    color='Education',
                                    title=f'Politeness by Education in {selected_region}',
-                                   color_discrete_sequence=blues_cmap[::-1],  # Adjust color sequence for deeper colors
+                                   color_discrete_sequence=blues_cmap[:2:-1],  # Adjust color sequence for deeper colors
                                    size_max=40,  # Adjust size_max for larger starting size
                                    range_y=[0, education_politeness['politeness_score_normalized'].max() * 1.4])  # Set Y-axis to start from 0
         fig_education.update_traces(marker=dict(sizemin=15))  # Ensure smallest bubble is still visible
