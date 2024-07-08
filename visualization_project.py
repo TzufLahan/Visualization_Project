@@ -121,59 +121,74 @@ if not filtered_data.empty:
 
     # Convert GeoDataFrame to GeoJSON
     merged_geojson = json.loads(merged.to_json())
-    
-    # Calculate the global min and max for the politeness score
-    global_min = merged['avg_politeness_score_normalized'].min()
-    global_max = merged['avg_politeness_score_normalized'].max()
-    
-    # Create a custom color scale with six distinct blues
-    blues_cmap = px.colors.sequential.Blues[2:8]
-    
-    # Define the bins for the politeness score
-    bins = np.linspace(global_min, global_max, 7)
-    
-    # Cut the politeness score into 6 bins
-    merged['politeness_score_bins'] = pd.cut(merged['avg_politeness_score_normalized'], bins=bins, labels=blues_cmap, include_lowest=True)
-    
-    # Create an interactive map with Plotly
+
+        # Create an interactive map with Plotly
     fig = px.choropleth_mapbox(
         merged,
         geojson=merged_geojson,
         locations=merged.index,
-        color='politeness_score_bins',
-        color_discrete_map="identity",  # Ensure the colors are used as discrete values
+        color='avg_politeness_score_normalized',
+        color_continuous_scale="Greens",  # Use a predefined Plotly colorscale for testing
+        range_color=[global_min, global_max],  # Set the range color to global min and max
         mapbox_style="open-street-map",
         zoom=3,
         center={"lat": 37.0902, "lon": -95.7129},
         opacity=0.5,
-        labels={'politeness_score_bins': 'Avg Politeness Score'}
-    )
-
-    # Update the layout to ensure a dynamic color scale
-    fig.update_layout(
-        coloraxis_colorbar=dict(
-            title="Politeness Score",
-            tickvals=bins,
-            ticktext=[f'{bins[i]:.2f}-{bins[i+1]:.2f}' for i in range(len(bins)-1)],
-        )
+        labels={'avg_politeness_score_normalized': 'Avg Politeness Score'}
     )
     
-    #Create an interactive map with Plotly
-    blues_cmap = px.colors.sequential.Blues[2:8]
+    # # Calculate the global min and max for the politeness score
+    # global_min = merged['avg_politeness_score_normalized'].min()
+    # global_max = merged['avg_politeness_score_normalized'].max()
+    
+    # # Create a custom color scale with six distinct blues
+    # blues_cmap = px.colors.sequential.Blues[2:8]
+    
+    # # Define the bins for the politeness score
+    # bins = np.linspace(global_min, global_max, 7)
+    
+    # # Cut the politeness score into 6 bins
+    # merged['politeness_score_bins'] = pd.cut(merged['avg_politeness_score_normalized'], bins=bins, labels=blues_cmap, include_lowest=True)
+    
+    # # Create an interactive map with Plotly
+    # fig = px.choropleth_mapbox(
+    #     merged,
+    #     geojson=merged_geojson,
+    #     locations=merged.index,
+    #     color='politeness_score_bins',
+    #     color_discrete_map="identity",  # Ensure the colors are used as discrete values
+    #     mapbox_style="open-street-map",
+    #     zoom=3,
+    #     center={"lat": 37.0902, "lon": -95.7129},
+    #     opacity=0.5,
+    #     labels={'politeness_score_bins': 'Avg Politeness Score'}
+    # )
 
-    fig = px.choropleth_mapbox(
-    merged,
-    geojson=merged_geojson,
-    locations=merged.index,
-    color='politeness_score_bins',
-    color_continuous_scale=blues_cmap,  # Use a predefined Plotly colorscale for testing
-    range_color=[global_min, global_max],  # Set the range color to global min and max
-    mapbox_style="open-street-map",
-    zoom=3,
-    center={"lat": 37.0902, "lon": -95.7129},
-    opacity=0.5,
-    labels={'avg_politeness_score_normalized': 'Avg Politeness Score'}
-    )
+    # # Update the layout to ensure a dynamic color scale
+    # fig.update_layout(
+    #     coloraxis_colorbar=dict(
+    #         title="Politeness Score",
+    #         tickvals=bins,
+    #         ticktext=[f'{bins[i]:.2f}-{bins[i+1]:.2f}' for i in range(len(bins)-1)],
+    #     )
+    # )
+    
+    # #Create an interactive map with Plotly
+    # blues_cmap = px.colors.sequential.Blues[2:8]
+
+    # fig = px.choropleth_mapbox(
+    # merged,
+    # geojson=merged_geojson,
+    # locations=merged.index,
+    # color='politeness_score_bins',
+    # color_continuous_scale=blues_cmap,  # Use a predefined Plotly colorscale for testing
+    # range_color=[global_min, global_max],  # Set the range color to global min and max
+    # mapbox_style="open-street-map",
+    # zoom=3,
+    # center={"lat": 37.0902, "lon": -95.7129},
+    # opacity=0.5,
+    # labels={'avg_politeness_score_normalized': 'Avg Politeness Score'}
+    # )
     
     # Calculate centroids for each region to place the text annotations
     gdf['centroid'] = gdf.centroid
