@@ -171,6 +171,12 @@ if not filtered_data.empty:
             population_size=('politeness_score_normalized', 'size')
         ).reset_index()
 
+        # Ensure all education levels are present
+        education_levels = ['Bachelor degree', 'Graduate degree', 'High school degree', 'Less than high school degree', 'Some college or Associate degree']
+        for level in education_levels:
+            if level not in education_politeness['Education'].values:
+                education_politeness = education_politeness.append({'Education': level, 'politeness_score_normalized': 0, 'population_size': 0}, ignore_index=True)
+
         # Define a distinct blue color palette for each education level
         color_discrete_map = {
             'Bachelor degree': '#084594',  # כחול כהה מאוד
