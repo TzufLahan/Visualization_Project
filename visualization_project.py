@@ -195,5 +195,5 @@ else:
 # Footer
 st.markdown("""
     ---
-    **Created by Ayelet Hashahar Cohen & Tzuf Lahan**  
+    **Created by Ayelet Hashahar Cohen & Tzuf Lahanמממממממממממ**  
 """)
