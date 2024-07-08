@@ -127,13 +127,17 @@ if not filtered_data.empty:
     blues_cmap = px.colors.sequential.Blues[2:8]
 
     fig = px.choropleth_mapbox(
-        filtered_data, geojson=merged_geojson, locations='Location', color='politeness_score_normalized',
-        color_continuous_scale=blues_cmap,  # Use custom Blues color scale with 6 shades
-        range_color=(global_min, global_max),
-        mapbox_style="carto-positron",
-        zoom=3, center={"lat": 37.0902, "lon": -95.7129},
-        opacity=0.5,
-        labels={'politeness_score_normalized': 'Politeness Score'}
+    merged,
+    geojson=merged_geojson,
+    locations=merged.index,
+    color='avg_politeness_score_normalized',
+    color_continuous_scale=blues_cmap,  # Use a predefined Plotly colorscale for testing
+    range_color=[global_min, global_max],  # Set the range color to global min and max
+    mapbox_style="open-street-map",
+    zoom=3,
+    center={"lat": 37.0902, "lon": -95.7129},
+    opacity=0.5,
+    labels={'avg_politeness_score_normalized': 'Avg Politeness Score'}
     )
     
     # Calculate centroids for each region to place the text annotations
