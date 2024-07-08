@@ -170,12 +170,21 @@ if not filtered_data.empty:
             politeness_score_normalized=('politeness_score_normalized', 'mean'),
             population_size=('politeness_score_normalized', 'size')
         ).reset_index()
+
+        # Define a distinct blue color palette for each education level
+        color_discrete_map = {
+            'Bachelor degree': '#084594',  # כחול כהה מאוד
+            'Graduate degree': '#2171b5',  # כחול כהה
+            'High school degree': '#4292c6',  # כחול בינוני
+            'Less than high school degree': '#6baed6',  # כחול בהיר
+            'Some college or Associate degree': '#9ecae1'  # כחול בהיר מאוד
+        }
     
         # First graph: Politeness level by education
         fig_education = px.scatter(education_politeness, x='Education', y='politeness_score_normalized',
                                    size='population_size', color='Education',
                                    title=f'Politeness by Education in {selected_region}',
-                                   color_discrete_sequence=px.colors.sequential.Blues[::-1],  # Adjust color sequence for deeper colors
+                                   color_discrete_sequence=color_discrete_map,  # Adjust color sequence for deeper colors
                                    size_max=40,  # Adjust size_max for larger starting size
                                    range_y=[0, education_politeness['politeness_score_normalized'].max() * 1.4])  # Set Y-axis to start from 0
         fig_education.update_traces(marker=dict(sizemin=15))  # Ensure smallest bubble is still visible
@@ -186,7 +195,7 @@ if not filtered_data.empty:
         # Second graph: Politeness level by income level and gender
         income_gender_politeness = region_data.groupby(['Household Income', 'Gender'])['politeness_score_normalized'].mean().reset_index()
         fig_income_gender = px.bar(income_gender_politeness, x='Household Income', y='politeness_score_normalized', color='Gender', barmode='group',
-                                   title=f'Politeness by Income Level and Gender in {selected_region}', color_discrete_map={'Female': '#1f77b4', 'Male': '#aec7e8'}
+                                   title=f'Politeness by Income Level and Gender in {selected_region}', color_discrete_map={'Female': '#aec7e8', 'Male': '#1f77b4'}
                                   )
         st.plotly_chart(fig_income_gender, use_container_width=True)
 else:
