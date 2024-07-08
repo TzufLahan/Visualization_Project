@@ -158,22 +158,22 @@ if not filtered_data.empty:
         )
     )
     
-    # #Create an interactive map with Plotly
-    # blues_cmap = px.colors.sequential.Blues[2:8]
+    #Create an interactive map with Plotly
+    blues_cmap = px.colors.sequential.Blues[2:8]
 
-    # fig = px.choropleth_mapbox(
-    # merged,
-    # geojson=merged_geojson,
-    # locations=merged.index,
-    # color='avg_politeness_score_normalized',
-    # color_continuous_scale=blues_cmap,  # Use a predefined Plotly colorscale for testing
-    # range_color=[global_min, global_max],  # Set the range color to global min and max
-    # mapbox_style="open-street-map",
-    # zoom=3,
-    # center={"lat": 37.0902, "lon": -95.7129},
-    # opacity=0.5,
-    # labels={'avg_politeness_score_normalized': 'Avg Politeness Score'}
-    # )
+    fig = px.choropleth_mapbox(
+    merged,
+    geojson=merged_geojson,
+    locations=merged.index,
+    color='politeness_score_bins',
+    color_continuous_scale=blues_cmap,  # Use a predefined Plotly colorscale for testing
+    range_color=[global_min, global_max],  # Set the range color to global min and max
+    mapbox_style="open-street-map",
+    zoom=3,
+    center={"lat": 37.0902, "lon": -95.7129},
+    opacity=0.5,
+    labels={'avg_politeness_score_normalized': 'Avg Politeness Score'}
+    )
     
     # Calculate centroids for each region to place the text annotations
     gdf['centroid'] = gdf.centroid
