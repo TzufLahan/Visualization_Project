@@ -127,7 +127,7 @@ if not filtered_data.empty:
     blues_cmap = px.colors.sequential.Blues[2:8]
 
     fig = px.choropleth_mapbox(
-        filtered_data, geojson=geojson, locations='Location', color='politeness_score_normalized',
+        filtered_data, geojson=merged_geojson, locations='Location', color='politeness_score_normalized',
         color_continuous_scale=blues_cmap,  # Use custom Blues color scale with 6 shades
         range_color=(global_min, global_max),
         mapbox_style="carto-positron",
