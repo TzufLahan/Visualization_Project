@@ -122,23 +122,31 @@ if not filtered_data.empty:
     # Convert GeoDataFrame to GeoJSON
     merged_geojson = json.loads(merged.to_json())
     
-    # Define the six blue shades
-    Blues6 = ['#084594', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef']
+    # Calculate the global min and max for the politeness score
+    global_min = merged['avg_politeness_score_normalized'].min()
+    global_max = merged['avg_politeness_score_normalized'].max()
+    
+    # Create a custom color scale with six distinct blues
+    blues_cmap = px.colors.sequential.Blues[2:8]
     
     # Define the bins for the politeness score
-    bins = np.linspace(data['politeness_score'].min(), data['politeness_score'].max(), 7)
+    bins = np.linspace(global_min, global_max, 7)
     
     # Cut the politeness score into 6 bins
-    data['politeness_score_bins'] = pd.cut(data['politeness_score'], bins=bins, labels=Blues6, include_lowest=True)
+    merged['politeness_score_bins'] = pd.cut(merged['avg_politeness_score_normalized'], bins=bins, labels=blues_cmap, include_lowest=True)
     
-    # Create a chloropleth map
-    fig = px.choropleth(
-        data_frame=data,
-        geojson='https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json', # Use your geojson data
-        locations='fips',  # Column in your data that matches the 'id' in the geojson
-        color='politeness_score_bins',  # Column in your data to use for coloring
-        category_orders={"politeness_score_bins": Blues6},
-        color_discrete_map="identity"
+    # Create an interactive map with Plotly
+    fig = px.choropleth_mapbox(
+        merged,
+        geojson=merged_geojson,
+        locations=merged.index,
+        color='politeness_score_bins',
+        color_discrete_map="identity",  # Ensure the colors are used as discrete values
+        mapbox_style="open-street-map",
+        zoom=3,
+        center={"lat": 37.0902, "lon": -95.7129},
+        opacity=0.5,
+        labels={'politeness_score_bins': 'Avg Politeness Score'}
     )
     
     # Update the layout to ensure a dynamic color scale
@@ -149,7 +157,7 @@ if not filtered_data.empty:
             ticktext=[f'{bins[i]:.2f}-{bins[i+1]:.2f}' for i in range(len(bins)-1)],
         )
     )
-    # # Create an interactive map with Plotly
+    # #Create an interactive map with Plotly
     # blues_cmap = px.colors.sequential.Blues[2:8]
 
     # fig = px.choropleth_mapbox(
