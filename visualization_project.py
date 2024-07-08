@@ -124,7 +124,7 @@ if not filtered_data.empty:
     
 
     # Create an interactive map with Plotly
-    blues_cmap = px.colors.sequential.Blues[2:8]
+    blues_cmap = ['#084594', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef']
 
     fig = px.choropleth_mapbox(
     merged,
