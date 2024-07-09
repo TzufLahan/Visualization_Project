@@ -122,13 +122,26 @@ if not filtered_data.empty:
     # Convert GeoDataFrame to GeoJSON
     merged_geojson = json.loads(merged.to_json())
 
+    # Calculate the global min and max for the politeness score
+    global_min = merged['avg_politeness_score_normalized'].min()
+    global_max = merged['avg_politeness_score_normalized'].max()
+    
+    # Create a custom color scale with six distinct blues
+    blues_cmap = px.colors.sequential.Blues[2:8]
+    
+    # Define the bins for the politeness score
+    bins = np.linspace(global_min, global_max, 7)
+    
+    # Cut the politeness score into 6 bins
+    merged['politeness_score_bins'] = pd.cut(merged['avg_politeness_score_normalized'], bins=bins, labels=blues_cmap, include_lowest=True)
+
         # Create an interactive map with Plotly
     fig = px.choropleth_mapbox(
         merged,
         geojson=merged_geojson,
         locations=merged.index,
         color='avg_politeness_score_normalized',
-        color_continuous_scale="Greens",  # Use a predefined Plotly colorscale for testing
+        color_continuous_scale="identity",  # Use a predefined Plotly colorscale for testing
         range_color=[global_min, global_max],  # Set the range color to global min and max
         mapbox_style="open-street-map",
         zoom=3,
