@@ -213,8 +213,8 @@ if not filtered_data.empty:
         y=0.5
     ))
 
-# Plot the interactive map
-st.plotly_chart(fig, use_container_width=True)
+    # Plot the interactive map
+    st.plotly_chart(fig, use_container_width=True)
     # Add graphs description
     st.markdown("""
            <div style='text-align: center; font-size: 25px;'>
