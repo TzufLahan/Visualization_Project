@@ -261,7 +261,14 @@ if not filtered_data.empty:
     # st.plotly_chart(fig, use_container_width=True)
 
     # Define a distinct blue color palette for bins
-    blues_cmap = px.colors.sequential.Blues[2:8]
+    blues_cmap = [
+        'rgb(8,48,107)',    # Darkest blue
+        'rgb(8,81,156)',    # Dark blue
+        'rgb(33,113,181)',  # Medium dark blue
+        'rgb(66,146,198)',  # Medium blue
+        'rgb(107,174,214)', # Light blue
+        'rgb(158,202,225)'  # Lightest blue
+    ]
     
     # Merge the data with the shapefile
     merged = gdf.set_index('region').join(region_politeness.set_index('region'))
