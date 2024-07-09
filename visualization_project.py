@@ -214,20 +214,20 @@ if not filtered_data.empty:
     # ))
 
     # # Plot the interactive map
-    # st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True)
 
-    # # Define a distinct blue color palette for bins
-    # blues_cmap = px.colors.sequential.Blues[2:8]
+    # Define a distinct blue color palette for bins
+    blues_cmap = px.colors.sequential.Blues[2:8]
     
-    # # Merge the data with the shapefile
-    # merged = gdf.set_index('region').join(region_politeness.set_index('region'))
+    # Merge the data with the shapefile
+    merged = gdf.set_index('region').join(region_politeness.set_index('region'))
     
-    # # Calculate the bins and assign colors
-    # merged['bins'] = pd.qcut(merged['avg_politeness_score_normalized'], 6, labels=blues_cmap)
-    # merged['avg_politeness_score_normalized'] = merged['avg_politeness_score_normalized'].round(2)
+    # Calculate the bins and assign colors
+    merged['bins'] = pd.qcut(merged['avg_politeness_score_normalized'], 6, labels=blues_cmap)
+    merged['avg_politeness_score_normalized'] = merged['avg_politeness_score_normalized'].round(2)
     
-    # # Convert GeoDataFrame to GeoJSON
-    # merged_geojson = json.loads(merged.to_json())
+    # Convert GeoDataFrame to GeoJSON
+    merged_geojson = json.loads(merged.to_json())
     
     # # Create an interactive map with Plotly
     # fig = px.choropleth_mapbox(
@@ -243,31 +243,6 @@ if not filtered_data.empty:
     #     labels={'avg_politeness_score_normalized': 'Avg Politeness Score'},
     #     hover_data={'avg_politeness_score_normalized': True}
     # )
-    
-    # # Calculate centroids for each region to place the text annotations
-    # gdf['centroid'] = gdf.geometry.centroid
-    # for idx, row in gdf.iterrows():
-    #     fig.add_trace(go.Scattermapbox(
-    #         lon=[row['centroid'].x],
-    #         lat=[row['centroid'].y],
-    #         text=row['region'],
-    #         mode='text',
-    #         showlegend=False,  # Hide the traces in the legend
-    #         textfont=dict(size=10, color='black'),
-    #     ))
-    
-    # # Plot the interactive map
-    # st.plotly_chart(fig, use_container_width=True)
-
-    # Merge the data with the shapefile
-    merged = gdf.set_index('region').join(region_politeness.set_index('region'))
-    
-    # Convert GeoDataFrame to GeoJSON
-    merged_geojson = json.loads(merged.to_json())
-    
-    # Define blue color scale with distinct steps
-    blues_cmap = px.colors.sequential.Blues[2:8]
-    
     # Create an interactive map with Plotly
     fig = px.choropleth_mapbox(
         merged,
@@ -275,29 +250,41 @@ if not filtered_data.empty:
         locations=merged.index,
         color='avg_politeness_score_normalized',
         color_continuous_scale=blues_cmap,
-        range_color=[merged['avg_politeness_score_normalized'].min(), merged['avg_politeness_score_normalized'].max()],
+        range_color=[global_min, global_max],
         mapbox_style="open-street-map",
         zoom=3,
         center={"lat": 37.0902, "lon": -95.7129},
         opacity=0.5,
-        labels={'avg_politeness_score_normalized': 'Avg Politeness Score'}
+        labels={'avg_politeness_score_normalized': 'Avg Politeness Score'},
+        hover_data={'region': True, 'avg_politeness_score_normalized': ':.2f'},
     )
     
+    # Update layout to ensure the color scale legend is displayed
+    fig.update_layout(
+        coloraxis_colorbar=dict(
+            title="Avg Politeness Score",
+            tickvals=[global_min, (global_min + global_max) / 2, global_max],
+            ticktext=[f"{global_min:.2f}", f"{(global_min + global_max) / 2:.2f}", f"{global_max:.2f}"]
+        )
+    )
+
+    
     # Calculate centroids for each region to place the text annotations
-    gdf['centroid'] = gdf.centroid
+    gdf['centroid'] = gdf.geometry.centroid
     for idx, row in gdf.iterrows():
         fig.add_trace(go.Scattermapbox(
             lon=[row['centroid'].x],
             lat=[row['centroid'].y],
             text=row['region'],
             mode='text',
-            showlegend=False,
+            showlegend=False,  # Hide the traces in the legend
             textfont=dict(size=10, color='black'),
         ))
     
     # Plot the interactive map
     st.plotly_chart(fig, use_container_width=True)
-        
+
+    
     # Add graphs description
     st.markdown("""
            <div style='text-align: center; font-size: 25px;'>
