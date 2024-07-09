@@ -219,11 +219,6 @@ if not filtered_data.empty:
     # Define a distinct blue color palette for bins
     blues_cmap = px.colors.sequential.Blues[2:8]
     
-    # Load your data
-    # Example data loading, replace with actual data loading code
-    gdf = gpd.read_file('your_shapefile.shp')
-    region_politeness = pd.read_csv('your_politeness_data.csv')
-    
     # Merge the data with the shapefile
     merged = gdf.set_index('region').join(region_politeness.set_index('region'))
     
