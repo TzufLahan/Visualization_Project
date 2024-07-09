@@ -259,6 +259,7 @@ if not filtered_data.empty:
     
     # # Plot the interactive map
     # st.plotly_chart(fig, use_container_width=True)
+
     # Define a distinct blue color palette for bins
     blues_cmap = px.colors.sequential.Blues[2:8]
     
@@ -278,7 +279,6 @@ if not filtered_data.empty:
         geojson=merged_geojson,
         locations=merged.index,
         color='bins',
-        color_discrete_map='identity',
         mapbox_style="open-street-map",
         zoom=3,
         center={"lat": 37.0902, "lon": -95.7129},
@@ -299,14 +299,13 @@ if not filtered_data.empty:
             textfont=dict(size=10, color='black'),
         ))
     
-    # Update layout to show colorbar with specific tick values
-    fig.update_layout(
-        coloraxis_colorbar=dict(
-            title="Avg Politeness Score",
-            tickvals=[0, 1, 2, 3, 4, 5],
-            ticktext=[f"{v:.2f}" for v in np.linspace(merged['avg_politeness_score_normalized'].min(), merged['avg_politeness_score_normalized'].max(), 6)]
-        )
-    )
+    # Add a manual colorbar
+    colorbar_ticks = [f"{v:.2f}" for v in np.linspace(merged['avg_politeness_score_normalized'].min(), merged['avg_politeness_score_normalized'].max(), 6)]
+    fig.update_layout(coloraxis_colorbar=dict(
+        title="Avg Politeness Score",
+        tickvals=blues_cmap,
+        ticktext=colorbar_ticks
+    ))
     
     # Plot the interactive map
     st.plotly_chart(fig, use_container_width=True)
