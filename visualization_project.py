@@ -243,28 +243,30 @@ if not filtered_data.empty:
     #     labels={'avg_politeness_score_normalized': 'Avg Politeness Score'},
     #     hover_data={'avg_politeness_score_normalized': True}
     # )
+
     # Create an interactive map with Plotly
+    bins = pd.cut(merged['avg_politeness_score_normalized'], bins=6, labels=False)
+    blues_cmap = px.colors.sequential.Blues[2:8]
+    
     fig = px.choropleth_mapbox(
         merged,
         geojson=merged_geojson,
         locations=merged.index,
-        color='avg_politeness_score_normalized',
-        color_continuous_scale=blues_cmap,
-        range_color=[global_min, global_max],
+        color=bins,
+        color_discrete_map=dict(enumerate(blues_cmap)),
         mapbox_style="open-street-map",
         zoom=3,
         center={"lat": 37.0902, "lon": -95.7129},
         opacity=0.5,
-        labels={'avg_politeness_score_normalized': 'Avg Politeness Score'},
-        hover_data={'region': True, 'avg_politeness_score_normalized': ':.2f'},
+        labels={'avg_politeness_score_normalized': 'Avg Politeness Score'}
     )
     
     # Update layout to ensure the color scale legend is displayed
     fig.update_layout(
         coloraxis_colorbar=dict(
             title="Avg Politeness Score",
-            tickvals=[global_min, (global_min + global_max) / 2, global_max],
-            ticktext=[f"{global_min:.2f}", f"{(global_min + global_max) / 2:.2f}", f"{global_max:.2f}"]
+            tickvals=[0, 1, 2, 3, 4, 5],
+            ticktext=[f"{v:.2f}" for v in np.linspace(global_min, global_max, 6)]
         )
     )
 
