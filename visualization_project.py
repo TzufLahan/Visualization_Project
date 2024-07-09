@@ -116,39 +116,14 @@ if not filtered_data.empty:
     region_politeness = filtered_data.groupby('Mapped Location')['politeness_score_normalized'].mean().reset_index()
     region_politeness.columns = ['region', 'avg_politeness_score_normalized']
 
-    # Merge the data with the shapefile
-    merged = gdf.set_index('region').join(region_politeness.set_index('region'))
+    # # Merge the data with the shapefile
+    # merged = gdf.set_index('region').join(region_politeness.set_index('region'))
 
-    # Convert GeoDataFrame to GeoJSON
-    merged_geojson = json.loads(merged.to_json())
+    # # Convert GeoDataFrame to GeoJSON
+    # merged_geojson = json.loads(merged.to_json())
 
-    # Calculate the global min and max for the politeness score
-    global_min = merged['avg_politeness_score_normalized'].min()
-    global_max = merged['avg_politeness_score_normalized'].max()
-    
-    # Create a custom color scale with six distinct blues
-    blues_cmap = px.colors.sequential.Blues[2:8]
-    
-    # Define the bins for the politeness score
-    bins = np.linspace(global_min, global_max, 7)
-    
-    # Cut the politeness score into 6 bins
-    merged['politeness_score_bins'] = pd.cut(merged['avg_politeness_score_normalized'], bins=bins, labels=blues_cmap, include_lowest=True)
 
-    fig = px.choropleth_mapbox(
-        merged,
-        geojson=merged_geojson,
-        locations=merged.index,
-        color='politeness_score_bins',
-        color_discrete_map="identity",  # Ensure the colors are used as discrete values
-        mapbox_style="open-street-map",
-        zoom=3,
-        center={"lat": 37.0902, "lon": -95.7129},
-        opacity=0.5,
-        labels={'politeness_score_bins': 'Avg Politeness Score'}
-    )
-
-        # Create an interactive map with Plotly
+    # # Create an interactive map with Plotly
     # fig = px.choropleth_mapbox(
     #     merged,
     #     geojson=merged_geojson,
@@ -164,7 +139,56 @@ if not filtered_data.empty:
     # )
 
     
-    # Calculate centroids for each region to place the text annotations
+    # # Calculate centroids for each region to place the text annotations
+    # gdf['centroid'] = gdf.centroid
+    # for idx, row in gdf.iterrows():
+    #     fig.add_trace(go.Scattermapbox(
+    #         lon=[row['centroid'].x],
+    #         lat=[row['centroid'].y],
+    #         text=row['region'],
+    #         mode='text',
+    #         showlegend=False,  # Hide the traces in the legend
+    #         textfont=dict(size=10, color='black'),
+    #     ))
+    
+    # # Plot the interactive map
+    # st.plotly_chart(fig, use_container_width=True)
+
+    # Define the blue color scale with six distinct colors
+    blues_cmap = ['#084594', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef']
+    
+    # Merge the data with the shapefile
+    merged = gdf.set_index('region').join(region_politeness.set_index('region'))
+    
+    # Calculate global min and max for the politeness scores
+    global_min = merged['avg_politeness_score_normalized'].min()
+    global_max = merged['avg_politeness_score_normalized'].max()
+    
+    # Create bins for the politeness scores
+    bins = pd.cut(merged['avg_politeness_score_normalized'], bins=len(blues_cmap), labels=blues_cmap)
+    
+    # Add the binned colors to the DataFrame
+    merged['binned_colors'] = bins
+    
+    # Convert GeoDataFrame to GeoJSON
+    merged_geojson = json.loads(merged.to_json())
+    
+    # Create an interactive map with Plotly
+    fig = px.choropleth_mapbox(
+        merged,
+        geojson=merged_geojson,
+        locations=merged.index,
+        color='binned_colors',
+        color_continuous_scale=blues_cmap,  # Use the custom blue color scale
+        range_color=[global_min, global_max],  # Set the range color to global min and max
+        mapbox_style="open-street-map",
+        zoom=3,
+        center={"lat": 37.0902, "lon": -95.7129},
+        opacity=0.5,
+        labels={'avg_politeness_score_normalized': 'Avg Politeness Score'}
+    )
+    
+    # Add text annotations for each region
     gdf['centroid'] = gdf.centroid
     for idx, row in gdf.iterrows():
         fig.add_trace(go.Scattermapbox(
@@ -176,9 +200,21 @@ if not filtered_data.empty:
             textfont=dict(size=10, color='black'),
         ))
     
-    # Plot the interactive map
-    st.plotly_chart(fig, use_container_width=True)
+    # Update colorbar to show the defined bins
+    fig.update_layout(coloraxis_colorbar=dict(
+        title="Politeness Level",
+        tickvals=[i/len(blues_cmap) for i in range(len(blues_cmap))],
+        ticktext=[f"{i*global_max/len(blues_cmap):.2f}-{(i+1)*global_max/len(blues_cmap):.2f}" for i in range(len(blues_cmap))],
+        lenmode="fraction",
+        len=0.8,
+        xanchor="left",
+        yanchor="middle",
+        x=1,
+        y=0.5
+    ))
 
+# Plot the interactive map
+st.plotly_chart(fig, use_container_width=True)
     # Add graphs description
     st.markdown("""
            <div style='text-align: center; font-size: 25px;'>
