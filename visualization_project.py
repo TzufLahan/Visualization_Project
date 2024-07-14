@@ -74,7 +74,7 @@ global_max = max(politeness_score_by_filters)
 
 # Initialize session state
 if 'selected_region' not in st.session_state:
-    st.session_state.selected_region = 'Pacific'  # Default region
+    st.session_state.selected_region = 'All'  # Default region
 
 # Streamlit layout enhancements
 st.set_page_config(
