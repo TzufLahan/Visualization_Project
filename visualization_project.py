@@ -56,11 +56,17 @@ politeness_score_by_filters = []
 for selected_income in income_levels:
     for selected_gender in genders:
         for selected_region in Region_list:
-            filtered_data = preprocessed_flying_etiquette_df[
-                (preprocessed_flying_etiquette_df['Household Income'] == selected_income) &
-                (preprocessed_flying_etiquette_df['Gender'] == selected_gender) &
-                (preprocessed_flying_etiquette_df['Location'] == selected_region)
-            ]
+            if selected_region == 'All':
+                filtered_data = preprocessed_flying_etiquette_df[
+                    (preprocessed_flying_etiquette_df['Household Income'] == selected_income) &
+                    (preprocessed_flying_etiquette_df['Gender'] == selected_gender)
+                ]
+            else:
+                filtered_data = preprocessed_flying_etiquette_df[
+                    (preprocessed_flying_etiquette_df['Household Income'] == selected_income) &
+                    (preprocessed_flying_etiquette_df['Gender'] == selected_gender) &
+                    (preprocessed_flying_etiquette_df['Location'] == selected_region)
+                ]
             politeness_score_by_filters.append(filtered_data['politeness_score_normalized'].mean())
 
 global_min = min(politeness_score_by_filters)
