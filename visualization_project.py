@@ -113,17 +113,10 @@ selected_income = st.selectbox('Select Household Income', income_levels)
 selected_gender = st.selectbox('Select Gender', genders)
 
 # Filter data based on selections
-if selected_region == 'All':
-    filtered_data = preprocessed_flying_etiquette_df[
-        ((preprocessed_flying_etiquette_df['Household Income'] == selected_income) | (selected_income == 'All')) &
-        ((preprocessed_flying_etiquette_df['Gender'] == selected_gender) | (selected_gender == 'All'))
-    ]
-else:
-    filtered_data = preprocessed_flying_etiquette_df[
-        ((preprocessed_flying_etiquette_df['Household Income'] == selected_income) | (selected_income == 'All')) &
-        ((preprocessed_flying_etiquette_df['Gender'] == selected_gender) | (selected_gender == 'All')) &
-        (preprocessed_flying_etiquette_df['Location'] == selected_region)
-    ]
+filtered_data = preprocessed_flying_etiquette_df[
+    ((preprocessed_flying_etiquette_df['Household Income'] == selected_income) | (selected_income == 'All')) &
+    ((preprocessed_flying_etiquette_df['Gender'] == selected_gender) | (selected_gender == 'All'))
+]
 
 # Check if the filtered data is not empty
 if not filtered_data.empty:
