@@ -193,7 +193,7 @@ if not filtered_data.empty:
        """, unsafe_allow_html=True)
 
     # Select region based on dropdown
-    selected_region = st.selectbox("Select a region", merged.index, index=merged.index.tolist().index(st.session_state.selected_region))
+    selected_region = st.selectbox("Select a region", Region_list, index=Region_list.index(st.session_state.selected_region))
 
     if selected_region:
         st.session_state.selected_region = selected_region  # Update session state
