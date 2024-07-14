@@ -45,6 +45,8 @@ for region in missing_regions:
     elif region == 'Mountain':
         # Define the coordinates for the Mountain region here
         polygon = Polygon([...])
+    else:
+        continue
     # Add other regions as needed
     new_region = gpd.GeoDataFrame({'region': [region], 'geometry': [polygon]})
     gdf = gdf.append(new_region, ignore_index=True)
