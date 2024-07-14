@@ -22,7 +22,7 @@ preprocessed_flying_etiquette_df = read_csv_from_googledrive('https://drive.goog
 # Define available options for filters
 income_levels = ['All', '$0 - $24,999', '$25,000 - $49,999', '$50,000 - $99,999', '$100,000 - $149,999', '150000']
 genders = ['All', 'Male', 'Female']
-Region_list = ['Pacific', 'Mountain', 'West North Central', 'West South Central', 'East North Central', 'East South Central', 'South Atlantic', 'Middle Atlantic', 'New England']
+Region_list = ['All', 'Pacific', 'Mountain', 'West North Central', 'West South Central', 'East North Central', 'East South Central', 'South Atlantic', 'Middle Atlantic', 'New England']
 
 
 def download_geojson(url, local_path):
