@@ -235,7 +235,7 @@ if not filtered_data.empty:
                                        title=f'Politeness by Income Level and Gender in {selected_region}', color_discrete_map={'Female': '#aec7e8', 'Male': '#1f77b4'}
                                       )
             fig_income_gender.update_layout(margin=dict(t=50, b=100, l=50, r=50))
-            st.plotly_chart(fig_income_gender, use_container_width=True, width=400, height=200)
+            st.plotly_chart(fig_income_gender, use_container_width=True, width=200, height=50)
     
         
         
