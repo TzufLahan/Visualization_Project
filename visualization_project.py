@@ -210,31 +210,25 @@ if not filtered_data.empty:
     
         # First graph: Politeness level by education
         fig_education = px.scatter(education_politeness, 
-                                   x='Education', 
-                                   y='politeness_score_normalized',
-                                   size='population_size', 
-                                   color='Education',
-                                   title=f'Politeness by Education in {selected_region}',
-                                   color_discrete_sequence=px.colors.sequential.Blues[::-1],  # Adjust color sequence for deeper colors
-                                   size_max=20,  # Adjust size_max for larger starting size
-                                   range_y=[0, education_politeness['politeness_score_normalized'].max() * 1.4],  # Set Y-axis to start from 0
-                                   height=400,  # Adjust height
-                                   width=500)  # Adjust width
+                           x='Education', 
+                           y='politeness_score_normalized',
+                           size='population_size', 
+                           color='Education',
+                           title=f'Politeness by Education in {selected_region}',
+                           color_discrete_sequence=px.colors.sequential.Blues[::-1],  # Adjust color sequence for deeper colors
+                           size_max=40,  # Adjust size_max for larger starting size
+                           range_y=[0, education_politeness['politeness_score_normalized'].max() * 1.4])  # Set Y-axis to start from 0
         fig_education.update_traces(marker=dict(sizemin=15))  # Ensure smallest bubble is still visible
-        fig_education.update_layout(margin=dict(t=50, b=50, l=50, r=50))
+        fig_education.update_layout(margin=dict(t=50, b=100, l=50, r=50))
+        st.plotly_chart(fig_education, use_container_width=True, width=600, height=400)
     
         # Second graph: Politeness level by income level and gender
         income_gender_politeness = region_data.groupby(['Household Income', 'Gender'])['politeness_score_normalized'].mean().reset_index()
-        fig_income_gender = px.bar(income_gender_politeness, 
-                                   x='Household Income', 
-                                   y='politeness_score_normalized', 
-                                   color='Gender', 
-                                   barmode='group',
-                                   title=f'Politeness by Income Level and Gender in {selected_region}', 
-                                   color_discrete_map={'Female': '#aec7e8', 'Male': '#1f77b4'},
-                                   height=400,  # Adjust height
-                                   width=500)  # Adjust width
-        fig_income_gender.update_layout(margin=dict(t=50, b=50, l=50, r=50))
+        fig_income_gender = px.bar(income_gender_politeness, x='Household Income', y='politeness_score_normalized', color='Gender', barmode='group',
+                                   title=f'Politeness by Income Level and Gender in {selected_region}', color_discrete_map={'Female': '#aec7e8', 'Male': '#1f77b4'}
+                                  )
+        fig_income_gender.update_layout(margin=dict(t=50, b=100, l=50, r=50))
+        st.plotly_chart(fig_income_gender, use_container_width=True, width=600, height=400)
     
         # Arrange the graphs side by side
         col1, col2 = st.columns(2)
