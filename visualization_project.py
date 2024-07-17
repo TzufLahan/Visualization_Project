@@ -217,16 +217,24 @@ if not filtered_data.empty:
                                    title=f'Politeness by Education in {selected_region}',
                                    color_discrete_sequence=px.colors.sequential.Blues[::-1],  # Adjust color sequence for deeper colors
                                    size_max=40,  # Adjust size_max for larger starting size
-                                   range_y=[0, education_politeness['politeness_score_normalized'].max() * 1.4])  # Set Y-axis to start from 0
-        fig_education.update_traces(marker=dict(sizemin=10))  # Ensure smallest bubble is still visible
-        fig_education.update_layout(margin=dict(t=30, b=30, l=30, r=30))
+                                   range_y=[0, education_politeness['politeness_score_normalized'].max() * 1.4],  # Set Y-axis to start from 0
+                                   height=400,  # Adjust height
+                                   width=500)  # Adjust width
+        fig_education.update_traces(marker=dict(sizemin=15))  # Ensure smallest bubble is still visible
+        fig_education.update_layout(margin=dict(t=50, b=50, l=50, r=50))
     
         # Second graph: Politeness level by income level and gender
         income_gender_politeness = region_data.groupby(['Household Income', 'Gender'])['politeness_score_normalized'].mean().reset_index()
-        fig_income_gender = px.bar(income_gender_politeness, x='Household Income', y='politeness_score_normalized', color='Gender', barmode='group',
-                                   title=f'Politeness by Income Level and Gender in {selected_region}', color_discrete_map={'Female': '#aec7e8', 'Male': '#1f77b4'}
-                                  )
-        fig_income_gender.update_layout(margin=dict(t=30, b=30, l=30, r=30))
+        fig_income_gender = px.bar(income_gender_politeness, 
+                                   x='Household Income', 
+                                   y='politeness_score_normalized', 
+                                   color='Gender', 
+                                   barmode='group',
+                                   title=f'Politeness by Income Level and Gender in {selected_region}', 
+                                   color_discrete_map={'Female': '#aec7e8', 'Male': '#1f77b4'},
+                                   height=400,  # Adjust height
+                                   width=500)  # Adjust width
+        fig_income_gender.update_layout(margin=dict(t=50, b=50, l=50, r=50))
     
         # Arrange the graphs side by side
         col1, col2 = st.columns(2)
@@ -235,6 +243,7 @@ if not filtered_data.empty:
         with col2:
             st.plotly_chart(fig_income_gender, use_container_width=True)
     
+        
 
 
 # Footer
