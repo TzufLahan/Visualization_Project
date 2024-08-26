@@ -213,7 +213,7 @@ if not filtered_data.empty:
         income_gender_politeness = region_data.groupby(['Household Income', 'Gender'])['politeness_score_normalized'].mean().reset_index()
     
         # Create two columns in the Streamlit app
-        col1, col2 = st.columns([1.8, 1])
+        col1, col2 = st.columns([1.5, 1])
     
         with col1:
             # First graph: Politeness level by education
