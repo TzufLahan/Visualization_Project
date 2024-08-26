@@ -296,6 +296,25 @@ fig_height.update_traces(marker=dict(sizemin=10))  # Ensure smallest bubble is s
 fig_height.update_layout(margin=dict(t=50, b=100, l=50, r=50))
 st.plotly_chart(fig_height, use_container_width=True)
 
+# Group data by seat recline frequency and calculate politeness score
+seat_recline_politeness = region_data.groupby('Seat Recline Frequency').agg(
+    politeness_score_normalized=('politeness_score_normalized', 'mean'),
+    population_size=('politeness_score_normalized', 'size')
+).reset_index()
+
+# Plot the grouped bar chart for Politeness vs Seat Recline Frequency
+fig_recline = px.bar(
+    seat_recline_politeness, 
+    x='Seat Recline Frequency', 
+    y='politeness_score_normalized', 
+    color='Seat Recline Frequency',
+    title=f'Politeness by Seat Recline Frequency in {selected_region}',
+    text_auto=True,
+    color_discrete_sequence=px.colors.qualitative.Set2
+)
+
+fig_recline.update_layout(margin=dict(t=50, b=100, l=50, r=50))
+st.plotly_chart(fig_recline, use_container_width=True)
 
         
         
