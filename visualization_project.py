@@ -316,8 +316,56 @@ fig_recline = px.bar(
 fig_recline.update_layout(margin=dict(t=50, b=100, l=50, r=50))
 st.plotly_chart(fig_recline, use_container_width=True)
 
-        
-        
+
+ # Prepare the data for the polar area chart
+fig_polar = px.line_polar(
+    height_politeness,
+    r='politeness_score_normalized',
+    theta='Height',
+    line_close=True,
+    title="Polar Area Chart: Politeness by Height",
+    color_discrete_sequence=px.colors.sequential.Plasma_r
+)
+
+# Display the polar area chart
+st.plotly_chart(fig_polar, use_container_width=True)
+       
+
+# Prepare the data for the Sankey diagram
+fig_sankey = go.Figure(go.Sankey(
+    node=dict(
+        pad=15,
+        thickness=20,
+        line=dict(color="black", width=0.5),
+        label=["Not Reclining", "Occasionally Reclining", "Frequently Reclining", "Low Politeness", "Medium Politeness", "High Politeness"],
+        color=["blue", "green", "red", "yellow", "orange", "purple"]
+    ),
+    link=dict(
+        source=[0, 1, 2, 0, 1, 2],  # Indicate the flow from reclining habits to politeness
+        target=[3, 4, 5, 4, 3, 5],
+        value=[8, 4, 2, 5, 3, 6],  # These values should be dynamically generated based on your data
+    )
+))
+
+fig_sankey.update_layout(title_text="Politeness by Seat Recline Frequency", font_size=10)
+st.plotly_chart(fig_sankey, use_container_width=True)
+
+
+# Plot a violin plot for politeness distribution by gender
+fig_violin = px.violin(
+    region_data, 
+    y="politeness_score_normalized", 
+    x="Gender", 
+    color="Gender",
+    box=True, 
+    points="all",  # Show all points in the distribution
+    title="Politeness Distribution by Gender",
+    color_discrete_map={'Female': '#FF69B4', 'Male': '#1f77b4'}
+)
+
+# Display the violin plot
+st.plotly_chart(fig_violin, use_container_width=True)
+
 
 
 # Footer
