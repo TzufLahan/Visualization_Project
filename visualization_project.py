@@ -274,28 +274,28 @@ if not filtered_data.empty:
 
 
 
-# Prepare the data for circular bar plot
-angles = np.linspace(0, 2 * np.pi, len(height_politeness['Height']), endpoint=False).tolist()
-heights = height_politeness['politeness_score_normalized'].tolist()
-heights += heights[:1]
-angles += angles[:1]
+# Group data by height and calculate politeness and population size
+height_politeness = region_data.groupby('Height').agg(
+    politeness_score_normalized=('politeness_score_normalized', 'mean'),
+    population_size=('politeness_score_normalized', 'size')
+).reset_index()
 
-# Initialize the figure
-fig_circular, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(polar=True))
+# Plot the scatter plot for Height vs Politeness
+fig_height = px.scatter(
+    height_politeness, 
+    x='Height', 
+    y='politeness_score_normalized',
+    size='population_size', 
+    color='Height',
+    title=f'Politeness by Height in {selected_region}',
+    size_max=40,  
+    range_y=[0, height_politeness['politeness_score_normalized'].max() * 1.4]
+)
 
-# Draw the bars
-ax.bar(angles[:-1], heights[:-1], width=0.4, color=plt.cm.viridis(heights), align='edge')
+fig_height.update_traces(marker=dict(sizemin=10))  # Ensure smallest bubble is still visible
+fig_height.update_layout(margin=dict(t=50, b=100, l=50, r=50))
+st.plotly_chart(fig_height, use_container_width=True)
 
-# Add labels
-ax.set_xticks(angles[:-1])
-ax.set_xticklabels(height_politeness['Height'], fontsize=12)
-ax.set_yticks([])
-
-# Add title
-ax.set_title("Circular Bar Plot: Politeness by Height", size=20, color='black', y=1.1)
-
-# Display the plot
-st.pyplot(fig_circular)
 
         
         
