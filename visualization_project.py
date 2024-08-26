@@ -234,7 +234,7 @@ if not filtered_data.empty:
                 color='Education',
                 title=f'Politeness by Education in {selected_region}',
                 category_orders={"Education": education_order},  # Order categories
-                color_discrete_sequence=px.colors.qualitative.Set1 #px.colors.sequential.Blues[::-1],  # Adjust color sequence for deeper colors
+                color_discrete_sequence=px.colors.qualitative.Set1, #px.colors.sequential.Blues[::-1],  # Adjust color sequence for deeper colors
                 size_max=40,  
                 range_y=[0, education_politeness['politeness_score_normalized'].max() * 1.4]  
             )
