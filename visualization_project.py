@@ -213,14 +213,13 @@ if not filtered_data.empty:
         income_gender_politeness = region_data.groupby(['Household Income', 'Gender'])['politeness_score_normalized'].mean().reset_index()
     
         # Create two columns in the Streamlit app
-        col1, col2 = st.columns([1.7, 1])
+        col1, col2 = st.columns([1.8, 1])
     
         with col1:
             # First graph: Politeness level by education
             # Define the logical order for the education levels
             education_order = [
-                'Less than high school', 'High school degree', 'Some college',
-                'Associate degree', 'Bachelor degree', 'Graduate degree'
+                'Less than high school', 'High school degree', 'Some college or Associate degree', 'Bachelor degree', 'Graduate degree'
             ]
             
             # Ensure 'Education' column is categorical with the defined order
@@ -235,20 +234,11 @@ if not filtered_data.empty:
                 color='Education',
                 title=f'Politeness by Education in {selected_region}',
                 category_orders={"Education": education_order},  # Order categories
-                color_discrete_sequence=px.colors.sequential.Blues[::-1],  # Adjust color sequence for deeper colors
+                color_discrete_sequence=px.colors.qualitative.Set1 #px.colors.sequential.Blues[::-1],  # Adjust color sequence for deeper colors
                 size_max=40,  
                 range_y=[0, education_politeness['politeness_score_normalized'].max() * 1.4]  
             )
 
-            # fig_education = px.scatter(education_politeness, 
-            #                x='Education', 
-            #                y='politeness_score_normalized',
-            #                size='population_size', 
-            #                color='Education',
-            #                title=f'Politeness by Education in {selected_region}',
-            #                color_discrete_sequence=px.colors.sequential.Blues[::-1],  # Adjust color sequence for deeper colors
-            #                size_max=40,  # Adjust size_max for larger starting size
-            #                range_y=[0, education_politeness['politeness_score_normalized'].max() * 1.4])  # Set Y-axis to start from 0
             fig_education.update_traces(marker=dict(sizemin=10))  # Ensure smallest bubble is still visible
             fig_education.update_layout(margin=dict(t=50, b=100, l=50, r=50))
             st.plotly_chart(fig_education, use_container_width=True)
