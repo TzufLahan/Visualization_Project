@@ -271,7 +271,32 @@ if not filtered_data.empty:
             #                           )
             fig_income_gender.update_layout(margin=dict(t=50, b=100, l=50, r=50))
             st.plotly_chart(fig_income_gender, use_container_width=True, width=200, height=50)
-    
+
+
+
+# Prepare the data for circular bar plot
+angles = np.linspace(0, 2 * np.pi, len(height_politeness['Height']), endpoint=False).tolist()
+heights = height_politeness['politeness_score_normalized'].tolist()
+heights += heights[:1]
+angles += angles[:1]
+
+# Initialize the figure
+fig_circular, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(polar=True))
+
+# Draw the bars
+ax.bar(angles[:-1], heights[:-1], width=0.4, color=plt.cm.viridis(heights), align='edge')
+
+# Add labels
+ax.set_xticks(angles[:-1])
+ax.set_xticklabels(height_politeness['Height'], fontsize=12)
+ax.set_yticks([])
+
+# Add title
+ax.set_title("Circular Bar Plot: Politeness by Height", size=20, color='black', y=1.1)
+
+# Display the plot
+st.pyplot(fig_circular)
+
         
         
 
