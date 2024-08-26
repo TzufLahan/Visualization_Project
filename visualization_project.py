@@ -89,7 +89,7 @@ st.title('US Heat Map Politeness Level By Regions')
 
 st.image("https://raw.githubusercontent.com/tzuflahan/Streamlit/main/Flight.png", use_column_width = True, width=50)
 st.markdown("""
-    <div style='text-align: left; font-size: 20px;'>
+    <div style='text-align: left; font-size: 17px;'>
         Welcome to the US Regions Politeness Heat Map! This interactive app allows you to explore the average politeness scores 
         across different regions in the United States based on household income and gender.
         <br><br>
@@ -249,9 +249,9 @@ if not filtered_data.empty:
             #                color_discrete_sequence=px.colors.sequential.Blues[::-1],  # Adjust color sequence for deeper colors
             #                size_max=40,  # Adjust size_max for larger starting size
             #                range_y=[0, education_politeness['politeness_score_normalized'].max() * 1.4])  # Set Y-axis to start from 0
-            # fig_education.update_traces(marker=dict(sizemin=10))  # Ensure smallest bubble is still visible
-            # fig_education.update_layout(margin=dict(t=50, b=100, l=50, r=50))
-            # st.plotly_chart(fig_education, use_container_width=True)
+            fig_education.update_traces(marker=dict(sizemin=10))  # Ensure smallest bubble is still visible
+            fig_education.update_layout(margin=dict(t=50, b=100, l=50, r=50))
+            st.plotly_chart(fig_education, use_container_width=True)
     
         with col2:
             # Second graph: Politeness level by income level and gender
@@ -279,8 +279,8 @@ if not filtered_data.empty:
             # fig_income_gender = px.bar(income_gender_politeness, x='Household Income', y='politeness_score_normalized', color='Gender', barmode='group',
             #                            title=f'Politeness by Income Level and Gender in {selected_region}', color_discrete_map={'Female': '#aec7e8', 'Male': '#1f77b4'}
             #                           )
-            # fig_income_gender.update_layout(margin=dict(t=50, b=100, l=50, r=50))
-            # st.plotly_chart(fig_income_gender, use_container_width=True, width=200, height=50)
+            fig_income_gender.update_layout(margin=dict(t=50, b=100, l=50, r=50))
+            st.plotly_chart(fig_income_gender, use_container_width=True, width=200, height=50)
     
         
         
