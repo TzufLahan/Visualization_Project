@@ -303,26 +303,32 @@ seat_recline_politeness = region_data.groupby('Seat Recline Frequency').agg(
     population_size=('politeness_score_normalized', 'size')
 ).reset_index()
 
-# Modify this to include politeness level and count the occurrences
-seat_recline_politeness = region_data.groupby(['Seat Recline Frequency', 'politeness_score_normalized']).size().reset_index(name='count')
 
-# Map recline frequencies and politeness levels to numerical indices
+bins = [0, 0.33, 0.66, 1.0]
+labels = ['Low', 'Medium', 'High']
+
+
+region_data['Politeness_Level_Range'] = pd.cut(region_data['politeness_score_normalized'], bins=bins, labels=labels)
+
+seat_recline_politeness = region_data.groupby(['Seat Recline Frequency', 'Politeness_Level_Range']).size().reset_index(name='count')
+
+# Map recline frequencies and politeness level ranges to numerical indices
 recline_mapping = {level: idx for idx, level in enumerate(seat_recline_politeness['Seat Recline Frequency'].unique())}
-politeness_mapping = {level: idx + len(recline_mapping) for idx, level in enumerate(seat_recline_politeness['politeness_score_normalized'].unique())}
+politeness_mapping = {level: idx + len(recline_mapping) for idx, level in enumerate(seat_recline_politeness['Politeness_Level_Range'].unique())}
 
 # Create source and target lists
 source = seat_recline_politeness['Seat Recline Frequency'].map(recline_mapping).tolist()
-target = seat_recline_politeness['politeness_score_normalized'].map(politeness_mapping).tolist()
+target = seat_recline_politeness['Politeness_Level_Range'].map(politeness_mapping).tolist()
 value = seat_recline_politeness['count'].tolist()
 
-# Generate the Sankey diagram with real data
+# Generate the Sankey diagram with the simplified data
 fig_sankey = go.Figure(go.Sankey(
     node=dict(
         pad=15,
         thickness=20,
         line=dict(color="black", width=0.5),
         label=list(recline_mapping.keys()) + list(politeness_mapping.keys()),
-        color=["blue", "green", "red", "yellow", "orange", "purple"]
+        color=["blue", "green", "red"]
     ),
     link=dict(
         source=source,
@@ -333,7 +339,6 @@ fig_sankey = go.Figure(go.Sankey(
 
 fig_sankey.update_layout(title_text="Politeness by Seat Recline Frequency", font_size=10)
 st.plotly_chart(fig_sankey, use_container_width=True)
-
 
 # Plot a violin plot for politeness distribution by gender
 fig_violin = px.violin(
