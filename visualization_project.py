@@ -321,29 +321,29 @@ source = seat_recline_politeness['Seat Recline Frequency'].map(recline_mapping).
 target = seat_recline_politeness['Politeness_Level_Range'].map(politeness_mapping).tolist()
 value = seat_recline_politeness['count'].tolist()
 
-# Define color mapping based on the colors in the provided image
+# Define darker color mapping based on the colors in the provided image
 recline_colors = {
-    'Never': '#E07B91',  # דומה לאדום ורוד שבתמונה
-    'Once in a while': '#F5C77C',  # דומה לכתום בהיר
-    'Always': '#7FB77E',  # דומה לירוק בהיר
-    'Usually': '#9464AC',  # דומה לסגול בהיר
-    'About half the time': '#5AA1E3'  # דומה לכחול בהיר
+    'Never': '#A34B61',  
+    'Once in a while': '#D18A3D',  
+    'Always': '#4F8B4E',  
+    'Usually': '#6A3D82',  
+    'About half the time': '#2C6EA8'  
 }
 
-# Define color mapping for the Politeness Level Ranges
+# Define darker color mapping for the Politeness Level Ranges
 politeness_colors = {
-    'Low': '#A9A9A9',  # דומה לאפור
-    'Medium': '#F4A261',  # דומה לכתום כהה
-    'High': '#2A9D8F'  # דומה לירוק כהה
+    'Low': '#696969',
+    'Medium': '#C4743D',
+    'High': '#206060' 
 }
 
 # Assign colors to the nodes
 node_colors = (
-    [recline_colors.get(label, 'lightgray') for label in recline_mapping.keys()] + 
-    [politeness_colors.get(label, 'lightgray') for label in politeness_mapping.keys()]
+    [recline_colors.get(label, 'darkgray') for label in recline_mapping.keys()] + 
+    [politeness_colors.get(label, 'darkgray') for label in politeness_mapping.keys()]
 )
 
-# Generate the Sankey diagram with custom colors
+# Generate the Sankey diagram with custom darker colors
 fig_sankey = go.Figure(go.Sankey(
     node=dict(
         pad=15,
@@ -356,7 +356,7 @@ fig_sankey = go.Figure(go.Sankey(
         source=source,
         target=target,
         value=value,
-        color='lightgray'
+        color='gray'
     )
 ))
 
@@ -364,7 +364,7 @@ fig_sankey.update_layout(
     title_text="Politeness by Seat Recline Frequency",
     font_size=14,
     title_font_size=24,
-    font_color='white'  # שמירה על פונט לבן
+    font_color='white'  
 )
 st.plotly_chart(fig_sankey, use_container_width=True)
 
