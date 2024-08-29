@@ -304,24 +304,11 @@ recline_order = ['Never', 'Once in a while', 'About half the time', 'Usually', '
 region_data['Seat Recline Frequency'] = pd.Categorical(region_data['Seat Recline Frequency'], categories=recline_order, ordered=True)
 
 # Group data by seat recline frequency and calculate politeness score
-seat_recline_politeness = region_data.groupby('Seat Recline Frequency').agg(
-    politeness_score_normalized=('politeness_score_normalized', 'mean'),
-    population_size=('politeness_score_normalized', 'size')
-).reset_index()
-
-# Define bins for politeness score
-bins = [0, 0.33, 0.66, 1.0]
-labels = ['Low', 'Medium', 'High']
-
-# Create a new column for politeness level range based on the bins
-region_data['Politeness_Level_Range'] = pd.cut(region_data['politeness_score_normalized'], bins=bins, labels=labels)
-
-# Group data by seat recline frequency and politeness level range
 seat_recline_politeness = region_data.groupby(['Seat Recline Frequency', 'Politeness_Level_Range']).size().reset_index(name='count')
 
 # Map recline frequencies and politeness level ranges to numerical indices
 recline_mapping = {level: idx for idx, level in enumerate(recline_order)}
-politeness_mapping = {level: idx + len(recline_mapping) for idx, level in enumerate(seat_recline_politeness['Politeness_Level_Range'].unique())}
+politeness_mapping = {level: idx + len(recline_mapping) for idx, level in enumerate(['Low', 'Medium', 'High'])}
 
 # Create source and target lists
 source = seat_recline_politeness['Seat Recline Frequency'].map(recline_mapping).tolist()
@@ -344,10 +331,13 @@ politeness_colors = {
     'High': '#206060' 
 }
 
-# Assign colors to the nodes
+# Create the ordered label list
+ordered_labels = recline_order + ['Low', 'Medium', 'High']
+
+# Assign colors to the nodes based on the ordered labels
 node_colors = (
     [recline_colors.get(label, 'darkgray') for label in recline_order] + 
-    [politeness_colors.get(label, 'darkgray') for label in politeness_mapping.keys()]
+    [politeness_colors.get(label, 'darkgray') for label in ['Low', 'Medium', 'High']]
 )
 
 # Generate the Sankey diagram with custom darker colors
@@ -356,7 +346,7 @@ fig_sankey = go.Figure(go.Sankey(
         pad=15,
         thickness=30,
         line=dict(color="gray", width=0.5),
-        label=list(recline_order) + list(politeness_mapping.keys()),
+        label=ordered_labels,
         color=node_colors
     ),
     link=dict(
