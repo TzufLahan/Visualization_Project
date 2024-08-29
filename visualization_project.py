@@ -321,34 +321,34 @@ source = seat_recline_politeness['Seat Recline Frequency'].map(recline_mapping).
 target = seat_recline_politeness['Politeness_Level_Range'].map(politeness_mapping).tolist()
 value = seat_recline_politeness['count'].tolist()
 
-# Define a color mapping for the Seat Recline Frequency
+# Define a softer color mapping for the Seat Recline Frequency
 recline_colors = {
-    'Never': 'red',
-    'Once in a while': 'orange',
-    'Always': 'green',
-    'Usually': 'purple',
-    'About half the time': 'blue'
+    'Never': '#FF9999',  # Soft red
+    'Once in a while': '#FFCC99',  # Soft orange
+    'Always': '#99CC99',  # Soft green
+    'Usually': '#CC99FF',  # Soft purple
+    'About half the time': '#99CCFF'  # Soft blue
 }
 
-# Define a color mapping for the Politeness Level Ranges
+# Define a softer color mapping for the Politeness Level Ranges
 politeness_colors = {
-    'Low': 'black',
-    'Medium': 'gray',
-    'High': 'lightgray'
+    'Low': '#D3D3D3',  # Light gray
+    'Medium': '#B0C4DE',  # Light steel blue
+    'High': '#F0E68C'  # Khaki
 }
 
 # Assign colors to the nodes
 node_colors = (
-    [recline_colors.get(label, 'gray') for label in recline_mapping.keys()] + 
-    [politeness_colors.get(label, 'gray') for label in politeness_mapping.keys()]
+    [recline_colors.get(label, 'lightgray') for label in recline_mapping.keys()] + 
+    [politeness_colors.get(label, 'lightgray') for label in politeness_mapping.keys()]
 )
 
-# Generate the Sankey diagram with custom colors and enhanced labels
+# Generate the Sankey diagram with custom soft colors and enhanced labels
 fig_sankey = go.Figure(go.Sankey(
     node=dict(
         pad=15,
         thickness=30,
-        line=dict(color="black", width=0.5),
+        line=dict(color="gray", width=0.5),
         label=list(recline_mapping.keys()) + list(politeness_mapping.keys()),
         color=node_colors
     ),
@@ -364,9 +364,9 @@ fig_sankey.update_layout(
     title_text="Politeness by Seat Recline Frequency",
     font_size=14,
     title_font_size=24,
-    paper_bgcolor='black',
-    plot_bgcolor='black',
-    font_color='white'
+    paper_bgcolor='white',
+    plot_bgcolor='white',
+    font_color='black'
 )
 st.plotly_chart(fig_sankey, use_container_width=True)
 
