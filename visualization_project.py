@@ -308,11 +308,11 @@ seat_recline_politeness = region_data.groupby(['Seat Recline Frequency', 'polite
 
 # Map recline frequencies and politeness levels to numerical indices
 recline_mapping = {level: idx for idx, level in enumerate(seat_recline_politeness['Seat Recline Frequency'].unique())}
-politeness_mapping = {level: idx + len(recline_mapping) for idx, level in enumerate(seat_recline_politeness['Politeness Level'].unique())}
+politeness_mapping = {level: idx + len(recline_mapping) for idx, level in enumerate(seat_recline_politeness['politeness_score_normalized'].unique())}
 
 # Create source and target lists
 source = seat_recline_politeness['Seat Recline Frequency'].map(recline_mapping).tolist()
-target = seat_recline_politeness['Politeness Level'].map(politeness_mapping).tolist()
+target = seat_recline_politeness['politeness_score_normalized'].map(politeness_mapping).tolist()
 value = seat_recline_politeness['count'].tolist()
 
 # Generate the Sankey diagram with real data
