@@ -376,6 +376,20 @@ fig_sankey.update_layout(
 st.plotly_chart(fig_sankey, use_container_width=True)
 
 
+# Plot a violin plot for politeness distribution by gender
+fig_violin = px.violin(
+    region_data, 
+    y="politeness_score_normalized", 
+    x="Gender", 
+    color="Gender",
+    box=True, 
+    points="all",  # Show all points in the distribution
+    title="Politeness Distribution by Gender",
+    color_discrete_map={'Female': '#FF69B4', 'Male': '#1f77b4'}
+)
+# Display the violin plot
+st.plotly_chart(fig_violin, use_container_width=True)
+
 # Footer
 st.markdown("""
     ---
