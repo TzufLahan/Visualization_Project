@@ -350,7 +350,17 @@ node_colors = (
     [politeness_colors.get(label, 'darkgray') for label in politeness_mapping.keys()]
 )
 
-# Generate the Sankey diagram with custom darker colors
+# Define color mapping for links based on the target
+link_colors = []
+for target_value in target:
+    if target_value == politeness_mapping['Low']:
+        link_colors.append('#ADD8E6')  # Light blue for Low
+    elif target_value == politeness_mapping['Medium']:
+        link_colors.append('#5DADE2')  # Medium blue for Medium
+    elif target_value == politeness_mapping['High']:
+        link_colors.append('#1F77B4')  # Darker blue for High
+
+# Generate the Sankey diagram with custom colors for links
 fig_sankey = go.Figure(go.Sankey(
     node=dict(
         pad=15,
@@ -363,7 +373,7 @@ fig_sankey = go.Figure(go.Sankey(
         source=source,
         target=target,
         value=value,
-        color='#5DADE2'  # Change the link color to light blue
+        color=link_colors  # Apply the custom link colors
     )
 ))
 
@@ -374,7 +384,6 @@ fig_sankey.update_layout(
     font_color='white'  
 )
 st.plotly_chart(fig_sankey, use_container_width=True)
-
 
 # Plot a violin plot for politeness distribution by gender
 fig_violin = px.violin(
