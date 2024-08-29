@@ -301,21 +301,32 @@ seat_recline_politeness = region_data.groupby('Seat Recline Frequency').agg(
     politeness_score_normalized=('politeness_score_normalized', 'mean'),
     population_size=('politeness_score_normalized', 'size')
 ).reset_index()
-       
 
-# Prepare the data for the Sankey diagram
+# Modify this to include politeness level and count the occurrences
+seat_recline_politeness = region_data.groupby(['Seat Recline Frequency', 'Politeness Level']).size().reset_index(name='count')
+
+# Map recline frequencies and politeness levels to numerical indices
+recline_mapping = {level: idx for idx, level in enumerate(seat_recline_politeness['Seat Recline Frequency'].unique())}
+politeness_mapping = {level: idx + len(recline_mapping) for idx, level in enumerate(seat_recline_politeness['Politeness Level'].unique())}
+
+# Create source and target lists
+source = seat_recline_politeness['Seat Recline Frequency'].map(recline_mapping).tolist()
+target = seat_recline_politeness['Politeness Level'].map(politeness_mapping).tolist()
+value = seat_recline_politeness['count'].tolist()
+
+# Generate the Sankey diagram with real data
 fig_sankey = go.Figure(go.Sankey(
     node=dict(
         pad=15,
         thickness=20,
         line=dict(color="black", width=0.5),
-        label=["Not Reclining", "Occasionally Reclining", "Frequently Reclining", "Low Politeness", "Medium Politeness", "High Politeness"],
+        label=list(recline_mapping.keys()) + list(politeness_mapping.keys()),
         color=["blue", "green", "red", "yellow", "orange", "purple"]
     ),
     link=dict(
-        source=[0, 1, 2, 0, 1, 2],  # Indicate the flow from reclining habits to politeness
-        target=[3, 4, 5, 4, 3, 5],
-        value=[8, 4, 2, 5, 3, 6],  # These values should be dynamically generated based on your data
+        source=source,
+        target=target,
+        value=value
     )
 ))
 
