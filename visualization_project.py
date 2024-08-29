@@ -363,7 +363,7 @@ fig_sankey = go.Figure(go.Sankey(
         source=source,
         target=target,
         value=value,
-        color='lightblue'  # Change the link color to light blue
+        color='#5DADE2'  # Change the link color to light blue
     )
 ))
 
