@@ -296,43 +296,43 @@ fig_height.update_traces(marker=dict(sizemin=10))  # Ensure smallest bubble is s
 fig_height.update_layout(margin=dict(t=50, b=100, l=50, r=50))
 st.plotly_chart(fig_height, use_container_width=True)
 
-st.write(region_data.columns)
-# # Group data by seat recline frequency and calculate politeness score
-# seat_recline_politeness = region_data.groupby('Seat Recline Frequency').agg(
-#     politeness_score_normalized=('politeness_score_normalized', 'mean'),
-#     population_size=('politeness_score_normalized', 'size')
-# ).reset_index()
 
-# # Modify this to include politeness level and count the occurrences
-# seat_recline_politeness = region_data.groupby(['Seat Recline Frequency', 'Politeness Level']).size().reset_index(name='count')
+# Group data by seat recline frequency and calculate politeness score
+seat_recline_politeness = region_data.groupby('Seat Recline Frequency').agg(
+    politeness_score_normalized=('politeness_score_normalized', 'mean'),
+    population_size=('politeness_score_normalized', 'size')
+).reset_index()
 
-# # Map recline frequencies and politeness levels to numerical indices
-# recline_mapping = {level: idx for idx, level in enumerate(seat_recline_politeness['Seat Recline Frequency'].unique())}
-# politeness_mapping = {level: idx + len(recline_mapping) for idx, level in enumerate(seat_recline_politeness['Politeness Level'].unique())}
+# Modify this to include politeness level and count the occurrences
+seat_recline_politeness = region_data.groupby(['Seat Recline Frequency', 'politeness_score_normalized']).size().reset_index(name='count')
 
-# # Create source and target lists
-# source = seat_recline_politeness['Seat Recline Frequency'].map(recline_mapping).tolist()
-# target = seat_recline_politeness['Politeness Level'].map(politeness_mapping).tolist()
-# value = seat_recline_politeness['count'].tolist()
+# Map recline frequencies and politeness levels to numerical indices
+recline_mapping = {level: idx for idx, level in enumerate(seat_recline_politeness['Seat Recline Frequency'].unique())}
+politeness_mapping = {level: idx + len(recline_mapping) for idx, level in enumerate(seat_recline_politeness['Politeness Level'].unique())}
 
-# # Generate the Sankey diagram with real data
-# fig_sankey = go.Figure(go.Sankey(
-#     node=dict(
-#         pad=15,
-#         thickness=20,
-#         line=dict(color="black", width=0.5),
-#         label=list(recline_mapping.keys()) + list(politeness_mapping.keys()),
-#         color=["blue", "green", "red", "yellow", "orange", "purple"]
-#     ),
-#     link=dict(
-#         source=source,
-#         target=target,
-#         value=value
-#     )
-# ))
+# Create source and target lists
+source = seat_recline_politeness['Seat Recline Frequency'].map(recline_mapping).tolist()
+target = seat_recline_politeness['Politeness Level'].map(politeness_mapping).tolist()
+value = seat_recline_politeness['count'].tolist()
 
-# fig_sankey.update_layout(title_text="Politeness by Seat Recline Frequency", font_size=10)
-# st.plotly_chart(fig_sankey, use_container_width=True)
+# Generate the Sankey diagram with real data
+fig_sankey = go.Figure(go.Sankey(
+    node=dict(
+        pad=15,
+        thickness=20,
+        line=dict(color="black", width=0.5),
+        label=list(recline_mapping.keys()) + list(politeness_mapping.keys()),
+        color=["blue", "green", "red", "yellow", "orange", "purple"]
+    ),
+    link=dict(
+        source=source,
+        target=target,
+        value=value
+    )
+))
+
+fig_sankey.update_layout(title_text="Politeness by Seat Recline Frequency", font_size=10)
+st.plotly_chart(fig_sankey, use_container_width=True)
 
 
 # Plot a violin plot for politeness distribution by gender
