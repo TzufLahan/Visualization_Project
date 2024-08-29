@@ -364,9 +364,9 @@ fig_sankey.update_layout(
     title_text="Politeness by Seat Recline Frequency",
     font_size=14,
     title_font_size=24,
-    paper_bgcolor='white',
-    plot_bgcolor='white',
-    font_color='black'
+    paper_bgcolor='black',  # Setting the background to black
+    plot_bgcolor='black',  # Setting the plot background to black
+    font_color='white'  # Setting the font color to white
 )
 st.plotly_chart(fig_sankey, use_container_width=True)
 
