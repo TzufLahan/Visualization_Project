@@ -297,23 +297,30 @@ fig_height.update_layout(margin=dict(t=50, b=100, l=50, r=50))
 st.plotly_chart(fig_height, use_container_width=True)
 
 
+# Define the order you want for the 'Seat Recline Frequency'
+recline_order = ['Never', 'Once in a while', 'About half the time', 'Usually', 'Always']
+
+# Ensure 'Seat Recline Frequency' column is categorical with the defined order
+region_data['Seat Recline Frequency'] = pd.Categorical(region_data['Seat Recline Frequency'], categories=recline_order, ordered=True)
+
 # Group data by seat recline frequency and calculate politeness score
 seat_recline_politeness = region_data.groupby('Seat Recline Frequency').agg(
     politeness_score_normalized=('politeness_score_normalized', 'mean'),
     population_size=('politeness_score_normalized', 'size')
 ).reset_index()
 
-
+# Define bins for politeness score
 bins = [0, 0.33, 0.66, 1.0]
 labels = ['Low', 'Medium', 'High']
 
-
+# Create a new column for politeness level range based on the bins
 region_data['Politeness_Level_Range'] = pd.cut(region_data['politeness_score_normalized'], bins=bins, labels=labels)
 
+# Group data by seat recline frequency and politeness level range
 seat_recline_politeness = region_data.groupby(['Seat Recline Frequency', 'Politeness_Level_Range']).size().reset_index(name='count')
 
 # Map recline frequencies and politeness level ranges to numerical indices
-recline_mapping = {level: idx for idx, level in enumerate(seat_recline_politeness['Seat Recline Frequency'].unique())}
+recline_mapping = {level: idx for idx, level in enumerate(recline_order)}
 politeness_mapping = {level: idx + len(recline_mapping) for idx, level in enumerate(seat_recline_politeness['Politeness_Level_Range'].unique())}
 
 # Create source and target lists
@@ -339,7 +346,7 @@ politeness_colors = {
 
 # Assign colors to the nodes
 node_colors = (
-    [recline_colors.get(label, 'darkgray') for label in recline_mapping.keys()] + 
+    [recline_colors.get(label, 'darkgray') for label in recline_order] + 
     [politeness_colors.get(label, 'darkgray') for label in politeness_mapping.keys()]
 )
 
@@ -349,7 +356,7 @@ fig_sankey = go.Figure(go.Sankey(
         pad=15,
         thickness=30,
         line=dict(color="gray", width=0.5),
-        label=list(recline_mapping.keys()) + list(politeness_mapping.keys()),
+        label=list(recline_order) + list(politeness_mapping.keys()),
         color=node_colors
     ),
     link=dict(
@@ -364,7 +371,9 @@ fig_sankey.update_layout(
     title_text="Politeness by Seat Recline Frequency",
     font_size=14,
     title_font_size=24,
-    font_color='white'  
+    paper_bgcolor='black',  # שמירה על רקע שחור
+    plot_bgcolor='black',  # שמירה על רקע שחור
+    font_color='white'  # שמירה על פונט לבן
 )
 st.plotly_chart(fig_sankey, use_container_width=True)
 
