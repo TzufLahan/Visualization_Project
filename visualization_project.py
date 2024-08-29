@@ -354,7 +354,7 @@ node_colors = (
 link_colors = []
 for target_value in target:
     if target_value == politeness_mapping['Low']:
-        link_colors.append('#7FB3D5')  # Light blue for Low
+        link_colors.append('#A3C9E2')  # Light blue for Low
     elif target_value == politeness_mapping['Medium']:
         link_colors.append('#5DADE2')  # Medium blue for Medium
     elif target_value == politeness_mapping['High']:
