@@ -321,20 +321,20 @@ source = seat_recline_politeness['Seat Recline Frequency'].map(recline_mapping).
 target = seat_recline_politeness['Politeness_Level_Range'].map(politeness_mapping).tolist()
 value = seat_recline_politeness['count'].tolist()
 
-# Define a softer color mapping for the Seat Recline Frequency
+# Define color mapping based on the colors in the provided image
 recline_colors = {
-    'Never': '#FF9999',  # Soft red
-    'Once in a while': '#FFCC99',  # Soft orange
-    'Always': '#99CC99',  # Soft green
-    'Usually': '#CC99FF',  # Soft purple
-    'About half the time': '#99CCFF'  # Soft blue
+    'Never': '#E07B91',  # דומה לאדום ורוד שבתמונה
+    'Once in a while': '#F5C77C',  # דומה לכתום בהיר
+    'Always': '#7FB77E',  # דומה לירוק בהיר
+    'Usually': '#9464AC',  # דומה לסגול בהיר
+    'About half the time': '#5AA1E3'  # דומה לכחול בהיר
 }
 
-# Define a softer color mapping for the Politeness Level Ranges
+# Define color mapping for the Politeness Level Ranges
 politeness_colors = {
-    'Low': '#D3D3D3',  # Light gray
-    'Medium': '#B0C4DE',  # Light steel blue
-    'High': '#F0E68C'  # Khaki
+    'Low': '#A9A9A9',  # דומה לאפור
+    'Medium': '#F4A261',  # דומה לכתום כהה
+    'High': '#2A9D8F'  # דומה לירוק כהה
 }
 
 # Assign colors to the nodes
@@ -343,7 +343,7 @@ node_colors = (
     [politeness_colors.get(label, 'lightgray') for label in politeness_mapping.keys()]
 )
 
-# Generate the Sankey diagram with custom soft colors and enhanced labels
+# Generate the Sankey diagram with custom colors
 fig_sankey = go.Figure(go.Sankey(
     node=dict(
         pad=15,
@@ -364,8 +364,7 @@ fig_sankey.update_layout(
     title_text="Politeness by Seat Recline Frequency",
     font_size=14,
     title_font_size=24,
- 
-    font_color='white'  # Setting the font color to white
+    font_color='white'  # שמירה על פונט לבן
 )
 st.plotly_chart(fig_sankey, use_container_width=True)
 
