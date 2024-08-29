@@ -321,23 +321,53 @@ source = seat_recline_politeness['Seat Recline Frequency'].map(recline_mapping).
 target = seat_recline_politeness['Politeness_Level_Range'].map(politeness_mapping).tolist()
 value = seat_recline_politeness['count'].tolist()
 
-# Generate the Sankey diagram with the simplified data
+# Define a color mapping for the Seat Recline Frequency
+recline_colors = {
+    'Never': 'red',
+    'Once in a while': 'orange',
+    'Always': 'green',
+    'Usually': 'purple',
+    'About half the time': 'blue'
+}
+
+# Define a color mapping for the Politeness Level Ranges
+politeness_colors = {
+    'Low': 'black',
+    'Medium': 'gray',
+    'High': 'lightgray'
+}
+
+# Assign colors to the nodes
+node_colors = (
+    [recline_colors.get(label, 'gray') for label in recline_mapping.keys()] + 
+    [politeness_colors.get(label, 'gray') for label in politeness_mapping.keys()]
+)
+
+# Generate the Sankey diagram with custom colors and enhanced labels
 fig_sankey = go.Figure(go.Sankey(
     node=dict(
         pad=15,
-        thickness=20,
+        thickness=30,
         line=dict(color="black", width=0.5),
         label=list(recline_mapping.keys()) + list(politeness_mapping.keys()),
-        color=["blue", "green", "red"]
+        color=node_colors
     ),
     link=dict(
         source=source,
         target=target,
-        value=value
+        value=value,
+        color='lightgray'
     )
 ))
 
-fig_sankey.update_layout(title_text="Politeness by Seat Recline Frequency", font_size=10)
+fig_sankey.update_layout(
+    title_text="Politeness by Seat Recline Frequency",
+    font_size=14,
+    title_font_size=24,
+    paper_bgcolor='black',
+    plot_bgcolor='black',
+    font_color='white'
+)
 st.plotly_chart(fig_sankey, use_container_width=True)
 
 # Plot a violin plot for politeness distribution by gender
