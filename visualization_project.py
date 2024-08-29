@@ -301,7 +301,7 @@ st.plotly_chart(fig_height, use_container_width=True)
 recline_order = ['Never', 'Once in a while', 'About half the time', 'Usually', 'Always']
 
 # Ensure 'Seat Recline Frequency' column is categorical with the defined order
-region_data['Seat Recline Frequency'] = pd.Categorical(region_data['Seat Recline Frequency'], categories=recline_order, ordered=True)
+region_data['Seat Recline Frequency'] = pd.Categorical(region_data['Seat Recline Frequency'], categories=recline_order)
 
 # Group data by seat recline frequency and calculate politeness score
 seat_recline_politeness = region_data.groupby('Seat Recline Frequency').agg(
