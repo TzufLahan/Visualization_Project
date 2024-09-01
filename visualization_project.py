@@ -197,10 +197,11 @@ if not filtered_data.empty:
     
     if selected_region:
         st.session_state.selected_region = selected_region  # Update session state
-        if selected_region != 'All':
-            region_data = preprocessed_flying_etiquette_df[preprocessed_flying_etiquette_df['Location'] == selected_region]
-        else:
+        if selected_region == 'All':
             region_data = preprocessed_flying_etiquette_df
+        else:
+             region_data = preprocessed_flying_etiquette_df[preprocessed_flying_etiquette_df['Location'] == selected_region]
+           
     
         # Group by education and calculate politeness and population size
         education_politeness = region_data.groupby('Education').agg(
