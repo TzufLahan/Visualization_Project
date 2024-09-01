@@ -364,7 +364,7 @@ for target_value in target:
 # Define the order for seat recline frequencies
 recline_order = ['Never', 'Once in a while', 'About half the time', 'Usually', 'Always']
 
-# Generate the Sankey diagram with custom colors for links
+# Generate the Sankey diagram with a simplified setup
 fig_sankey = go.Figure(go.Sankey(
     node=dict(
         pad=15,
@@ -382,7 +382,7 @@ fig_sankey = go.Figure(go.Sankey(
     )
 ))
 
-# Update layout to set the font color to black, ensuring no white edges
+# Update layout for title and general settings
 fig_sankey.update_layout(
     title_text="Politeness by Seat Recline Frequency",
     font_size=14,
@@ -392,6 +392,7 @@ fig_sankey.update_layout(
 
 # Display the Sankey diagram in Streamlit
 st.plotly_chart(fig_sankey, use_container_width=True)
+
 
 
 
