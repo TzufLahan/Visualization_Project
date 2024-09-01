@@ -361,13 +361,16 @@ for target_value in target:
     elif target_value == politeness_mapping['High']:
         link_colors.append('#1F77B4')  # Darker blue for High
 
+# Define the order for seat recline frequencies
+recline_order = ['Never', 'Once in a while', 'About half the time', 'Usually', 'Always']
+
 # Generate the Sankey diagram with custom colors for links
 fig_sankey = go.Figure(go.Sankey(
     node=dict(
         pad=15,
         thickness=30,
         line=dict(color="gray", width=0.5),
-        label=list(recline_order) + list(politeness_mapping.keys()),
+        label=list(recline_order) + list(politeness_mapping.keys()),  # Ensure left side is ordered correctly
         color=node_colors
     ),
     link=dict(
@@ -378,13 +381,17 @@ fig_sankey = go.Figure(go.Sankey(
     )
 ))
 
+# Update layout to set the font color to black
 fig_sankey.update_layout(
     title_text="Politeness by Seat Recline Frequency",
     font_size=14,
     title_font_size=24,
-    font_color='white'  
+    font_color='black'  # Change font color to black
 )
+
+# Display the Sankey diagram in Streamlit
 st.plotly_chart(fig_sankey, use_container_width=True)
+
 
 # Plot a violin plot for politeness distribution by gender
 fig_violin = px.violin(
