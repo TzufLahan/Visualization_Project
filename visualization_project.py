@@ -371,7 +371,8 @@ fig_sankey = go.Figure(go.Sankey(
         thickness=30,
         line=dict(color="gray", width=0.5),
         label=list(recline_order) + list(politeness_mapping.keys()),  # Ensure left side is ordered correctly
-        color=node_colors
+        color=node_colors,
+        textfont=dict(color='black')  # Set font color to pure black
     ),
     link=dict(
         source=source,
@@ -381,16 +382,17 @@ fig_sankey = go.Figure(go.Sankey(
     )
 ))
 
-# Update layout to set the font color to black
+# Update layout to set the font color to black, ensuring no white edges
 fig_sankey.update_layout(
     title_text="Politeness by Seat Recline Frequency",
     font_size=14,
     title_font_size=24,
-    font_color='black'  # Change font color to black
+    font=dict(color='black')  # Ensures title and other text are black
 )
 
 # Display the Sankey diagram in Streamlit
 st.plotly_chart(fig_sankey, use_container_width=True)
+
 
 
 # Plot a violin plot for politeness distribution by gender
