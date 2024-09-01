@@ -191,18 +191,16 @@ if not filtered_data.empty:
                <strong>Please select a region to see the differences and changes in the graphs below.</strong>
            </div>
        """, unsafe_allow_html=True)
-   # Select region based on dropdown
-selected_region = st.selectbox("Select a region", Region_list, index=Region_list.index(st.session_state.selected_region))
-
-# Update session state before processing the data
-if selected_region:
-    st.session_state.selected_region = selected_region  # Update session state
-
-    # Process data based on the newly selected region
-    if selected_region != 'All':
-        region_data = preprocessed_flying_etiquette_df[preprocessed_flying_etiquette_df['Location'] == selected_region]
-    else:
-        region_data = preprocessed_flying_etiquette_df
+    
+    # Select region based on dropdown
+    selected_region = st.selectbox("Select a region", Region_list, index=Region_list.index(st.session_state.selected_region))
+    
+    if selected_region:
+        st.session_state.selected_region = selected_region  # Update session state
+        if selected_region != 'All':
+            region_data = preprocessed_flying_etiquette_df[preprocessed_flying_etiquette_df['Location'] == selected_region]
+        else:
+            region_data = preprocessed_flying_etiquette_df
     
         # Group by education and calculate politeness and population size
         education_politeness = region_data.groupby('Education').agg(
