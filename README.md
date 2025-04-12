@@ -1,12 +1,14 @@
-Visualization Course Final Project - Exploring the level of politeness of passengers during a flight and the differing opinions in the United States
 
 # ✈️ U.S. Flight Politeness Analysis – Streamlit Dashboard
+
+
 
 This project explores the **level of politeness among airline passengers during a flight and the differing opinions in the United States**, using real survey data collected from domestic flights.  
 Built with [Streamlit](https://streamlit.io/), this interactive dashboard enables users to explore patterns in passenger behavior, sentiment, and perceived politeness on flights throughout the U.S.
 
 🌐 [Live App](https://visualization-project-tzuf-ayhelet.streamlit.app/)
 
+![Banner](https://github.com/TzufLahan/Visualization_Project/blob/main/Flight.png)
 ---
 
 ## 🎯 Purpose
